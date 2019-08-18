@@ -12,30 +12,56 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHeading } from 'native-base';
 import Modal from "react-native-modal";
+import axios from 'axios';
 
 import CompListKost from '../component/CompListKos';
 import CompMaps from '../component/CompMaps';
 import { FlatList } from "react-native-gesture-handler";
 
 class ClassListKos extends Component {
+
+
+  componentDidMount() {
+    axios.get('https://192.168.0.23:5000/api/v1/dorms')
+      .then(response => {
+        this.setState({
+          dataKos: 'tes'
+        })
+      })
+      .catch(error => { });
+      console.log(this.state.dataKos)
+  }
+
   constructor() {
-    let dataList = [
-      {
-        idNya: '1', title: 'Baru'
-      }, {
-        idNya: '2', title: 'Baru Dua'
-      }
-    ];
     super();
     this.state = {
       isListKos: false,
       judul: 'List Data [MAP]',
       noPage: 0,
-      dataItem: [{
-        idNya: '1', title: 'Baru'
-      }, {
-        idNya: '2', title: 'Baru Dua'
-      }],
+      dataItem: [
+        {
+          id: '1',
+          name: 'Kosan Mamiroom Isma TegalRejo SATUUU',
+          type: 'Putri',
+          photo: require('../assets/dummy.jpg'),
+          room: 2,
+          size: '5 x 6 m',
+          price: 125000,
+          city: 'Yogyakarta',
+          isPromo: false
+        },
+        {
+          id: '2',
+          name: 'Kosan Mamiroom Isma TegalRejo DUAASS',
+          type: 'Campur',
+          photo: require('../assets/dummy.jpg'),
+          room: 5,
+          size: '2 x 2 m',
+          price: 500000,
+          city: 'Bandung',
+          isPromo: true
+        },
+      ],
       isModalVisible: false
     };
   }
@@ -114,20 +140,20 @@ class ClassListKos extends Component {
       }}>
         <Modal style={[stylesCari.cardSimpleContainer,
         {
-          backgroundColor:'#fff',
-          borderRadius:10,
-          alignItems:'center',
-          justifyContent:'flex-end',
-          padding:15
+          backgroundColor: '#fff',
+          borderRadius: 10,
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          padding: 15
         }]} isVisible={this.state.isModalVisible}
         >
           <Button mode='contained' style={{
-            backgroundColor:'#0476d9',
-            JustifyContent:'flex-end'
+            backgroundColor: '#0476d9',
+            JustifyContent: 'flex-end'
           }} onPress={() => this.toggleModal()}>
             <Text style={{
-              fontSize:14,
-              color:'#fff'
+              fontSize: 14,
+              color: '#fff'
             }}>Close</Text>
           </Button>
         </Modal>
@@ -142,8 +168,10 @@ class ClassListKos extends Component {
   }
 
   render() {
-    let paramNavigateDetailKos = () => {
-      this.props.navigation.navigate('ClassDetailKos')
+    let paramNavigateDetailKos = (itemNya) => {
+      this.props.navigation.navigate('ClassDetailKos', {
+        itemNya
+      })
     };
     return (
       <View style={{ flex: 1 }}>
@@ -162,16 +190,15 @@ class ClassListKos extends Component {
 
               <FlatList
                 data={this.state.dataItem}
-                keyExtractor={(item) => item.idNya}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                  <CompListKost paramNavigate={paramNavigateDetailKos} dataItem={item.key} />
+                  <CompListKost paramNavigate={() => paramNavigateDetailKos(item)} dataItem={item} />
                 )}
                 ListFooterComponent={() => (
                   <View style={{ height: 50 }}></View>
                 )}
                 style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}
               />
-
 
               {/* Untuk Filter dan Sorting */}
               <View style={[stylesCari.cardSimpleContainer, {
@@ -246,7 +273,7 @@ const stylesHead = StyleSheet.create({
     backgroundColor: '#303f9f',
     elevation: 2
   },
-  cardSimpleContainer : {
+  cardSimpleContainer: {
     shadowColor: '#000000',
     shadowOffset: {
       height: 3,

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import CompHeader from '../component/CompHeader';
 import ListBooking from './ClassListBooking';
-import ListHistory from './ClassListHistory';
+import ListFavorite from './ClassListFavorite';
 
 export default class Wishlist extends React.Component {
   onRegionChange(region) {
@@ -19,19 +19,19 @@ export default class Wishlist extends React.Component {
         <Tabs>
           <Tab heading={
             <TabHeading style={{ backgroundColor: '#0476d9' }}>
-              <Icon name="list-alt" color='#fff' size={20} />
-              <Text style={{ color: '#fff' ,fontSize:16}}>  Booking </Text>
+              <Icon name="bookmark" color='#fff' size={20} />
+              <Text style={{ color: '#fff', fontSize: 16 }}> Favorite</Text>
             </TabHeading>
-          }>
-            <ListBooking />
+          } >
+            <ListFavorite />
           </Tab>
           <Tab heading={
             <TabHeading style={{ backgroundColor: '#0476d9' }}>
-              <Icon name="history" color='#fff' size={20}/>
-              <Text style={{ color: '#fff' ,fontSize:16 }}> History</Text>
+              <Icon name="list-alt" color='#fff' size={20} />
+              <Text style={{ color: '#fff', fontSize: 16 }}>  Booking </Text>
             </TabHeading>
-          } >
-            <ListHistory />
+          }>
+            <ListBooking />
           </Tab>
         </Tabs>
       </View>

@@ -7,7 +7,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import CompHeader from '../component/CompHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default class ClassListHistory extends React.Component {
+export default class ClassListFavorite extends React.Component {
 
   render() {
     return (
@@ -24,12 +24,12 @@ export default class ClassListHistory extends React.Component {
             alignItems:'center',
             alignContent:'center' 
           }}>
-            <Icon name='ios-list-box' size={55} color='#0476d9' />
+            <Icon name='ios-list-box' size={60} color='#0476d9' />
             <Text style={{
               fontSize: 25,
               fontWeight: 'bold',
               color: '#0476d9'
-            }}>LIST HISTORY</Text>
+            }}>LIST FAVORITE</Text>
             <Text style={{
               fontSize: 17,
               fontWeight: 'bold',

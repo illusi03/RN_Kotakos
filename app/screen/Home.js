@@ -20,45 +20,50 @@ import CompKotaPopuler from '../component/CompKotaPopuler';
 import ClassListKos from './ClassListKos';
 import ClassDetailKos from './ClassDetailKos';
 import ClassIklanTambah from './ClassIklanTambah';
+import ClassDetailBooking from './ClassDetailBooking';
+import ChatScreen from './ChatScreen'
 
 class ClassHome extends Component {
   state = {
     position: 1,
     interval: null,
     dataSource: [
-      {
-        url: 'https://static.mamikos.com/uploads/cache/data/user/2019-08-02/T71F3KDd-360x480.jpg',
-      }, {
-        url: 'https://mamikos.com/uploads/cache/data/user/2019-01-28/I9kswUvH-360x480.jpg',
-      }, {
-        url: 'https://mamikos.com/uploads/cache/data/user/2019-02-06/tYYKBgjd-360x480.jpg',
-      }
+      { url: require('../assets/slider/promo1.jpg') },
+      { url: require('../assets/slider/promo2.jpg') },
+      { url: require('../assets/slider/promo3.jpg') },
+      { url: require('../assets/slider/promo4.jpg') },
+      { url: require('../assets/slider/promo5.jpg') },
     ],
     dataItemKotaPopuler: [
       {
         id: '1',
         namaKota: 'Bandung',
-        uriImage: 'https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/03/wisata-kota-bandung.jpg'
+        uriImage: require('../assets/kota/bandung.jpg')
       },
       {
         id: '2',
-        namaKota: 'Jakarta',
-        uriImage: 'https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/03/wisata-kota-bandung.jpg'
+        namaKota: 'Yogyakarta',
+        uriImage: require('../assets/kota/yogyakarta.jpg')
       },
       {
         id: '3',
-        namaKota: 'Yogyakarta',
-        uriImage: 'https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/03/wisata-kota-bandung.jpg'
+        namaKota: 'Semarang',
+        uriImage: require('../assets/kota/semarang.jpg')
       },
       {
         id: '4',
-        namaKota: 'Yogyakarta',
-        uriImage: 'https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/03/wisata-kota-bandung.jpg'
+        namaKota: 'Jakarta',
+        uriImage: require('../assets/kota/jakarta.jpg')
       },
       {
         id: '5',
-        namaKota: 'Yogyakarta',
-        uriImage: 'https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/03/wisata-kota-bandung.jpg'
+        namaKota: 'Surabaya',
+        uriImage: require('../assets/kota/surabaya.jpg')
+      },
+      {
+        id: '6',
+        namaKota: 'Denpasar',
+        uriImage: require('../assets/kota/yogyakarta.jpg')
       }
     ]
   }
@@ -120,17 +125,17 @@ class ClassHome extends Component {
               {/* Promo Iklan */}
               <View style={[styles.itemBaris]}>
                 <Text style={{ color: '#474747', fontWeight: 'bold', paddingVertical: 10, fontSize: 19 }}>Promo</Text>
-                <View style={{ padding: 0, borderRadius:5 }}>
+                <View style={{ padding: 0, borderRadius: 5 }}>
                   <Slideshow
                     height={145}
                     overlay={false}
                     arrowSize={2}
-                    onPress={() => this.props.navigation.navigate('ClassDetailKos')}
                     dataSource={this.state.dataSource}
                     position={this.state.position}
                     onPositionChanged=
-                    {position => this.setState({ position })
-                    } />
+                    {position => this.setState({ position })}
+                    containerStyle={{ resideMode: 'center' }}
+                  />
                 </View>
               </View>
 
@@ -160,40 +165,21 @@ class ClassHome extends Component {
               <View style={[{ flexDirection: 'column' }]}>
                 <Text style={{ color: '#474747', fontWeight: 'bold', paddingTop: 10, fontSize: 19 }}>Kota Populer</Text>
                 <FlatList
-                    data={this.state.dataItemKotaPopuler}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                      <CompKotaPopuler paramNavigate={null} dataItem={item.id} />
-                    )} 
-                    horizontal={true}
-                    />
+                  data={this.state.dataItemKotaPopuler}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <CompKotaPopuler paramNavigate={null} dataItem={item} />
+                  )}
+                  horizontal={true}
+                />
               </View>
             </View>
             <View style={{
-              height:350
+              height: 350
             }}></View>
           </ScrollView>
         </View>
       </View>
-    );
-  }
-}
-
-const RootStackHome = createStackNavigator({
-  ClassDetailKos: ClassDetailKos,
-  ClassListKos: ClassListKos,
-  ClassIklanTambah: ClassIklanTambah,
-  ClassHome: ClassHome
-}, {
-    initialRouteName: "ClassHome",
-    headerMode: 'none'
-  });
-const RootContainerHome = createAppContainer(RootStackHome);
-
-class Home extends Component {
-  render() {
-    return (
-      <RootContainerHome />
     );
   }
 }
@@ -235,4 +221,4 @@ const styles = StyleSheet.create({
 });
 
 //export default App;
-export default Home;
+export default ClassHome;

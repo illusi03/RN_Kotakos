@@ -22,7 +22,8 @@ class Profile extends React.Component {
       <View style={[styles.container]}>
         <CompHeader/>
         <View style={{
-          
+          justifyContent:'center',
+          alignItems:'center'
         }}>
           <Text>Profile Screen</Text>
         </View>

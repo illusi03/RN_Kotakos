@@ -1,15 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
-import Home from '../screen/Home'
-import ChatStack from '../screen/ChatScreen'
-import Wishlist from '../screen/Wishlist'
-import Profile from '../screen/Profile'
 
-const MemberNavigator = createBottomTabNavigator({
+import Home from '../screenPublic/Home'
+import Account from '../screenPublic/Account'
 
+const PublicNav = createBottomTabNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
@@ -19,31 +16,12 @@ const MemberNavigator = createBottomTabNavigator({
       )
     }
   },
-  Chat: {
-    screen: ChatStack,
+  Account: {
+    screen: Account,
     navigationOptions: {
-      header: null,
-      tabBarLabel: 'Chat',
+      tabBarLabel: 'Account',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-chatboxes" color={tintColor} size={24} />
-      )
-    }
-  },
-  Wishlist: {
-    screen: Wishlist,
-    navigationOptions: {
-      tabBarLabel: 'Wishlist',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-heart" color={tintColor} size={28} />
-      )
-    }
-  },
-  Profile: {
-    screen: Profile,
-    navigationOptions: {
-      tabBarLabel: 'Profile',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-person" color={tintColor} size={24} />
+        <Icon name="ios-key" color={tintColor} size={25} />
       )
     }
   }
@@ -52,7 +30,7 @@ const MemberNavigator = createBottomTabNavigator({
       activeTintColor: '#0597f2',
       inactiveTintColor: '#0071b8',
       style: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f0f0f0',
         borderTopWidth: 0,
         shadowOffset: { width: 6, height: 6 },
         shadowColor: 'black',
@@ -61,7 +39,7 @@ const MemberNavigator = createBottomTabNavigator({
         paddingTop: 10
       }
     }
-  })
+  });
 
 const styles = StyleSheet.create({
   container: {
@@ -71,4 +49,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-export default createAppContainer(MemberNavigator)
+export default createAppContainer(PublicNav)

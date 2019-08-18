@@ -144,7 +144,7 @@ class ClassIklanTambah extends Component {
               </View>
             </View>
             <CompTextInput textLabel='No HP' placeholder='Masukan No HP / Telp ' />
-            <CompTextInput textLabel='Pengelola Kos' placeholder='Masukan Nama Pengelola Kos' />
+            <CompTextInput textLabel='Harga /Bulan' placeholder='Masukan Nilai Numerik' />
             <Button mode='contained' style={{
               backgroundColor: '#0476d9'
             }} onPress={() => alert('Submit Data Ya')}>

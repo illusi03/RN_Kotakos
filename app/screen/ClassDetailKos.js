@@ -25,7 +25,6 @@ class ClassDetailKos extends Component {
       isFotoState: true
     };
   }
-
   static navigationOptions = {
     title: 'Detail Kos',
     headerStyle: {
@@ -40,7 +39,6 @@ class ClassDetailKos extends Component {
       </TouchableOpacity>
     )
   };
-
   onShare = async () => {
     try {
       const result = await Share.share({
@@ -60,13 +58,12 @@ class ClassDetailKos extends Component {
       alert(error.message);
     }
   };
-
   _compPetaView(isFotoState) {
     if (isFotoState) {
       return (
         <View>
           <View style={{ position: 'relative', paddingBottom: 0 }}>
-            <Image source={{ uri: 'http://bang.kerupux.com/uploads/cache/data/style/2015-11-26/gdFXkVNr-540x720.jpg' }} style={{ height: 200, width: '100%', borderRadius: 7, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+            <Image source={this.props.navigation.getParam('itemNya').photo} style={{ height: 200, width: '100%', borderRadius: 7, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
             {/* <TouchableOpacity onPress={() => alert('Tes')} style={{ position: 'absolute', right: 10, top: 5 }}>
               <Icon name="star" size={35} color='#ffffff' />
             </TouchableOpacity> */}
@@ -114,8 +111,9 @@ class ClassDetailKos extends Component {
       });
     }
   }
+
   render() {
-    const itemId = this.props.navigation.getParam('itemId', 'NO-ID');
+    const item = this.props.navigation.getParam('itemNya');
     return (
       <View style={{ flex: 1 }}>
         {/* Header Detail Kost */}
@@ -141,7 +139,8 @@ class ClassDetailKos extends Component {
                 fontSize: 22,
                 fontWeight: 'bold',
                 paddingLeft: 20
-              }}>KosYu</Text>
+              }}>KosYu
+              </Text>
             </View>
             <View style={{
               flex: 1, flexDirection: 'row', alignSelf: 'flex-end',
@@ -161,8 +160,7 @@ class ClassDetailKos extends Component {
           </View>
         </View>
 
-
-        <View style={{ flex: 1, padding: 5, position: 'relative' , backgroundColor:'#fafafa'}}>
+        <View style={{ flex: 1, padding: 5, position: 'relative', backgroundColor: '#fafafa' }}>
           <ScrollView style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}>
             <View>
               {this._compPetaView(this.state.isFotoState)}
@@ -171,27 +169,37 @@ class ClassDetailKos extends Component {
               <View style={{ padding: 15, paddingBottom: 20 }}>
                 <View>
                   <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-                    <Text style={{ color: 'red' }}>Putri</Text>
+                    <Text style={{ color: 'red' }}>
+                      {item.type}
+                    </Text>
                     <Text> - </Text>
-                    <Text style={{ color: 'green' }}>Ada 3 Kamar</Text>
+                    <Text style={{ color: 'green' }}>
+                      Ada {item.room} Kamar
+                    </Text>
                     <Text> - </Text>
-                    <Text>Cimanggis</Text>
+                    <Text>
+                      {item.city}
+                    </Text>
                   </View>
                   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Kost Mamirooms Tegalrejo Yogyakarta</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>
+                      {item.name}
+                    </Text>
                   </View>
                   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
-                    <Text style={{ fontSize: 15, color: 'black' }}>Update 12 Agustus 2019 - 14.00</Text>
+                    <Text style={{ fontSize: 15, color: 'black' }}>
+                      12 Agustus 2019 - 14.00
+                    </Text>
                   </View>
                   {/* Sparator */}
                   <View style={{ borderColor: 'black', borderWidth: 0.2 }} />
                   <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 3 }}>
                     <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
-                      <Icon name="bolt" size={25} color='black' style={{ paddingRight: 5 }} />
+                      <Icon name="bolt" size={25} color='#0476d9' style={{ paddingRight: 5 }} />
                       <Text style={{ fontSize: 12, color: 'black' }}>TIDAK Termasuk Listrik</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
-                      <Icon name="dollar-sign" size={25} color='black' style={{ paddingRight: 5 }} />
+                      <Icon name="dollar-sign" size={25} color='#0476d9' style={{ paddingRight: 5 }} />
                       <Text style={{ fontSize: 12, color: 'black' }}>TIDAK ada min. Bayar</Text>
                     </View>
                   </View>
@@ -202,8 +210,10 @@ class ClassDetailKos extends Component {
                       fontSize: 20, color: 'black', paddingVertical: 5, fontWeight: 'bold'
                     }}>Luas Kamar</Text>
                     <View style={{ flexDirection: 'row' }}>
-                      <Icon name="compress" size={25} color='black' style={{ paddingRight: 5 }} />
-                      <Text style={{ fontSize: 20, color: 'black', paddingLeft: 5, paddingBottom: 5 }}>5 x 3 m</Text>
+                      <Icon name="compress" size={25} color='#0476d9' style={{ paddingRight: 5 }} />
+                      <Text style={{ fontSize: 20, color: 'black', paddingLeft: 5, paddingBottom: 5 }}>
+                        {item.size}
+                      </Text>
                     </View>
                   </View>
 
@@ -234,19 +244,19 @@ class ClassDetailKos extends Component {
 
                   <View style={{ flexDirection: 'row', paddingVertical: 25, paddingHorizontal: 15, alignItems: 'center' }}>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="bed" size={25} color='black' style={{ marginHorizontal: 15 }} />
+                      <Icon name="bed" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black' }}>Kasur</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="toilet" size={25} color='black' style={{ marginHorizontal: 15 }} />
+                      <Icon name="toilet" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>WC Didalam</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="wifi" size={25} color='black' style={{ marginHorizontal: 15 }} />
+                      <Icon name="wifi" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>Wifi</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="key" size={25} color='black' style={{ marginHorizontal: 15 }} />
+                      <Icon name="key" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>Key 24 Jam</Text>
                     </View>
                   </View>
@@ -321,7 +331,7 @@ class ClassDetailKos extends Component {
                   </View>
                   <View style={[styles.cardSimpleContainer, { backgroundColor: '#fff', flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 3 }]}>
                     <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', marginRight: 15 }}>
-                      <Icon name='user-circle' size={40} color='black' />
+                      <Icon name='user-circle' size={40} color='#0476d9' />
                     </View>
                     <View style={{ flex: 4, paddingLeft: 3 }}>
                       <Text style={{ fontSize: 15 }}>Pemilik Kos</Text>
@@ -350,11 +360,11 @@ class ClassDetailKos extends Component {
             paddingHorizontal: 5,
             backgroundColor: '#fff',
             flexDirection: 'row',
-            height: 50, width: '90%',
+            height: 50, width: '95%',
             position: 'absolute',
-            left: '5%',
+            left: '2.5%',
             right: 0,
-            bottom: 2,
+            bottom: 0,
             justifyContent: 'space-between',
             alignItems: 'center'
           }]}>
@@ -362,10 +372,12 @@ class ClassDetailKos extends Component {
               <View>
                 <Text style={{
                   fontWeight: 'bold',
-                  fontSize: 15
-                }}>Rp. 1.250.000 / Bulan</Text>
+                  fontSize: 15,
+                  color: '#000'
+                }}>Rp. {item.price} / Bulan</Text>
                 <Text style={{
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  color: '#000'
                 }} >Lihat Semua Harga</Text>
               </View>
             </View>
@@ -381,7 +393,7 @@ class ClassDetailKos extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: 5,
-                borderColor:'#0476d9'
+                borderColor: '#0476d9'
               }}>
                 <Text style={{
                   fontWeight: 'bold',
@@ -395,8 +407,10 @@ class ClassDetailKos extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: 5,
-                borderColor:'#0476d9'
-              }}>
+                borderColor: '#0476d9'
+              }}
+                onPress={() => this.props.navigation.navigate('ClassDetailBooking')}
+              >
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#fff'

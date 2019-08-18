@@ -19,32 +19,46 @@ class CompListKos extends Component {
       <View style={{ padding: 15, paddingBottom: 20 }}>
         <TouchableOpacity onPress={this.props.paramNavigate}>
           <View style={{ position: 'relative', paddingBottom: 10 }}>
-          <Image source={{ uri: 'http://bang.kerupux.com/uploads/cache/data/style/2015-11-26/gdFXkVNr-540x720.jpg' }} style={{ height: 125, width: '100%', borderRadius:7, borderBottomLeftRadius:0,borderBottomRightRadius:0}} />
-            <Button icon="turned-in-not" color='white' style={{ position: 'absolute', right: -15, top: 1 }}> </Button>
+            <Image source={this.props.dataItem.photo}
+              style={{
+                height: 125,
+                width: '100%',
+                borderRadius: 7,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0
+              }} />
           </View>
         </TouchableOpacity>
         <View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-            <Text style={{ color: 'red' }}>Putri</Text>
+            <Text style={{ color: 'red' }}>
+              {this.props.dataItem.type}
+            </Text>
             <Text> - </Text>
-            <Text style={{ color: 'green' }}>Ada 3 Kamar</Text>
+            <Text style={{ color: 'green' }}>
+              Ada {this.props.dataItem.room} Kamar
+            </Text>
             <Text> - </Text>
-            <Text>Cimanggis</Text>
+            <Text>{this.props.dataItem.city}</Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black'}}>Rp. 1.377.000 / Bulan</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>Rp. {this.props.dataItem.price} / Bulan</Text>
             <Text style={{ color: 'grey' }}> - </Text>
-            <Text style={{ color: 'green' }}>Ada Promo</Text>
+            <Text style={{ color: '#000' }}>
+              {this.props.dataItem.isPromo ? 'Ada Promo' : 'Tidak ada Promo'}
+            </Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black', }}>Kosan Mamiroom Isma Tagarejo Yogyakarta</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black', }}>
+              {this.props.dataItem.name}
+            </Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ backgroundColor: '#0476d9', padding: 4, borderRadius: 5 }}>
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>Bisa Booking</Text>
             </View>
           </View>
-          <View style={{marginTop: 3 }} />
+          <View style={{ marginTop: 3 }} />
         </View>
       </View>
     );
