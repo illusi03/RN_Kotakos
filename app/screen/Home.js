@@ -103,6 +103,7 @@ class ClassHome extends Component {
             }}>Mau Cari Kost Dimana ?</Text>
             <View style={{ position: 'relative' }}>
               <Button onPress={() => this.props.navigation.navigate('ClassListKos')} style={{
+              
                 backgroundColor: '#e8e8e8',
                 borderColor: '#0476d9',
                 borderRadius: 8,

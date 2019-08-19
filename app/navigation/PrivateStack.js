@@ -20,8 +20,6 @@ const StackPrivate = createStackNavigator({
     headerMode: 'none'
   });
 
-const ContainerPrivate = createAppContainer(StackPrivate);
-
 class PrivateStack extends Component {
   render() {
     return (
@@ -30,4 +28,4 @@ class PrivateStack extends Component {
   }
 }
 //export default App;
-export default PrivateStack;
+export default StackPrivate;

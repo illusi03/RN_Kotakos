@@ -8,7 +8,6 @@ import PrivateStack from './PrivateStack';
 
 const StackPublic = createStackNavigator({
   PublicNav:PublicNav,
-  PrivateStack:PrivateStack,
   ClassAccount: ClassAccount,
   ClassRegister: ClassRegister
 }, {
@@ -16,7 +15,6 @@ const StackPublic = createStackNavigator({
     headerMode: 'none'
   });
 
-const ContainerPublic = createAppContainer(StackPublic);
 
 class PublicStack extends Component {
   render() {
@@ -26,4 +24,4 @@ class PublicStack extends Component {
   }
 }
 //export default App;
-export default PublicStack;
+export default StackPublic;

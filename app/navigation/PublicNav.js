@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import Home from '../screenPublic/Home'
+import Home from '../screen/Home'
 import Account from '../screenPublic/Account'
 
 const PublicNav = createBottomTabNavigator({

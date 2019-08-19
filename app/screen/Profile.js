@@ -5,7 +5,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   TouchableHighlight,
   Image,
   Alert
@@ -13,6 +12,7 @@ import {
 import RegisterForm from '../component/RegisterForm'
 import ProfileScreen from './Profile'
 import LoginSultanForm from './LoginSultanForm'
+import {Button} from 'react-native-paper'
 
 import CompHeader from '../component/CompHeader';
 
@@ -22,10 +22,15 @@ class Profile extends React.Component {
       <View style={[styles.container]}>
         <CompHeader/>
         <View style={{
+          flex:1,
           justifyContent:'center',
-          alignItems:'center'
+          alignItems:'center',
+          justifyContent:'center'
         }}>
           <Text>Profile Screen</Text>
+          <Button mode='contained'>
+            <Text>Logout</Text>
+          </Button>
         </View>
       </View>
     )
