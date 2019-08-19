@@ -103,7 +103,8 @@ class ClassHome extends Component {
             }}>Mau Cari Kost Dimana ?</Text>
             <View style={{ position: 'relative' }}>
               <Button onPress={() => this.props.navigation.navigate('ClassListKos')} style={{
-              
+              // <Button onPress={() => this.props.navigation.navigate('ClassListKosPublic')} style={{
+                //Jika Blm login Change Navigate
                 backgroundColor: '#e8e8e8',
                 borderColor: '#0476d9',
                 borderRadius: 8,

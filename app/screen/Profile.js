@@ -7,7 +7,8 @@ import {
   TextInput,
   TouchableHighlight,
   Image,
-  Alert
+  Alert,
+  AsyncStorage
 } from 'react-native';
 import RegisterForm from '../component/RegisterForm'
 import ProfileScreen from './Profile'
@@ -17,6 +18,12 @@ import {Button} from 'react-native-paper'
 import CompHeader from '../component/CompHeader';
 
 class Profile extends React.Component {
+
+  _logoutAsync = async () => {
+    await AsyncStorage.clear();
+    this.props.navigation.navigate('ClassAccount');
+  };
+
   render() {
     return (
       <View style={[styles.container]}>
@@ -28,7 +35,7 @@ class Profile extends React.Component {
           justifyContent:'center'
         }}>
           <Text>Profile Screen</Text>
-          <Button mode='contained'>
+          <Button mode='contained' onPress={()=> this.props.navigation.navigate('PublicStack')}>
             <Text>Logout</Text>
           </Button>
         </View>

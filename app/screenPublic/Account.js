@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  FlatList
+  FlatList,
+  AsyncStorage
 } from "react-native";
 import { Button } from 'react-native-paper'
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -17,14 +18,36 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import ClassRegister from './Register';
 
 class ClassAccount extends Component {
-
-  seleksiLogin = () =>{
-    if(true){
-      this.props.navigation.navigate('PrivateStack')
-    }else{
-      alert('Maaf Login Gagal (Akun Tidak Sesuai)')
-    }
+  state = {
+    textUsername : '',
+    textPass : '',
+    userObj : ''
   }
+
+  _aksiHandleTextUsername = (text) => {
+    this.setState({
+      textUsername:text
+    })
+  }
+  _aksiHandleTextPass = (text) => {
+    this.setState({
+      textPass:text
+    })
+  }
+  seleksiLogin = () =>{
+    this.setState({
+      userObj : {
+        username : this.state.textUsername,
+        password : this.state.textPass
+      }
+    })
+    //Syntax Untuk Memasukan State Ke ASYNC STORAGE
+    this.props.navigation.navigate('PrivateStack')
+    // this._loginAsync(this.state.userObj)
+  }
+  _loginAsync = async (userObjNya)=> {
+    await AsyncStorage.setItem('userObj', userObjNya)
+  } 
 
   render() {
     return (
@@ -53,7 +76,7 @@ class ClassAccount extends Component {
         <View style={{
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop:25
+          marginTop:25,
         }}>
           <Image source={require('../assets/illustrator/login.png')} style={{
             width: 150,
@@ -93,6 +116,7 @@ class ClassAccount extends Component {
               width: '100%'
             }}
               placeholder='Masukan Username Disini'
+              onChangeText={this._aksiHandleTextUsername}
             ></TextInput>
           </View>
           <View style={{
@@ -112,6 +136,7 @@ class ClassAccount extends Component {
               width: '100%'
             }}
               placeholder='Masukan Password Disini'
+              onChangeText={this._aksiHandleTextPass}
             ></TextInput>
           </View>
           <View style={{

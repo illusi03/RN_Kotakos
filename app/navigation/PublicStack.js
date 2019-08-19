@@ -6,10 +6,25 @@ import ClassAccount from '../screenPublic/Account';
 import ClassRegister from '../screenPublic/Register';
 import PrivateStack from './PrivateStack';
 
+//Tambahan
+import ClassHome from '../screen/Home';
+import ClassListKos from '../screen/ClassListKos';
+import ClassDetailKos from '../screen/ClassDetailKos';
+import ClassIklanTambah from '../screen/ClassIklanTambah';
+import ClassDetailBooking from '../screen/ClassDetailBooking';
+
+
 const StackPublic = createStackNavigator({
   PublicNav:PublicNav,
   ClassAccount: ClassAccount,
-  ClassRegister: ClassRegister
+  ClassRegister: ClassRegister,
+
+  //Tambahan Navigate (Supaya Navbar Tidak Nimpah Ke Private)
+  ClassHomePublic: ClassHome,
+  ClassListKosPublic: ClassListKos,
+  ClassDetailKosPublic: ClassDetailKos,
+  ClassIklanTambahPublic: ClassIklanTambah,
+  ClassDetailBookingPublic: ClassDetailBooking
 }, {
     initialRouteName: "PublicNav",
     headerMode: 'none'

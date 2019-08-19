@@ -28,10 +28,8 @@ class CheckStack extends Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
-    // const userToken = await AsyncStorage.getItem('userToken');
+    // const userToken = await AsyncStorage.getItem('userObj');
     const userToken = false;
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
     this.props.navigation.navigate(userToken ? 'PrivateStack' : 'PublicStack');
   };
 
@@ -45,7 +43,7 @@ class CheckStack extends Component {
         <Text style={{
           fontSize:20,
           fontWeight:'bold'
-        }}>LOADING ...</Text>
+        }}>HARAP TUNGGU...</Text>
         <ActivityIndicator size={50} color="#0000ff" />
       </View>
     );
