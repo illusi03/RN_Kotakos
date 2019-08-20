@@ -7,12 +7,8 @@ import {
   TextInput,
   TouchableHighlight,
   Image,
-  Alert,
-  AsyncStorage
+  Alert
 } from 'react-native';
-import RegisterForm from '../component/RegisterForm'
-import ProfileScreen from './Profile'
-import LoginSultanForm from './LoginSultanForm'
 import {Button} from 'react-native-paper'
 
 import CompHeader from '../component/CompHeader';

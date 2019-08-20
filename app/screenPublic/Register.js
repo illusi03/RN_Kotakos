@@ -18,7 +18,7 @@ export default class ClassRegister extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-        {/* Header KosCube */}
+        {/* Header  */}
         <View style={[styles.cardSimpleContainer, {
           height: 55,
           width: '100%',
@@ -36,7 +36,7 @@ export default class ClassRegister extends Component {
             color: '#fff',
             fontSize: 22,
             fontWeight: 'bold'
-          }}>KosCube</Text>
+          }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
 

@@ -6,10 +6,10 @@ class CompMaps extends React.Component {
     super(props);
     this.state = {
       region: {
-        latitude: 24.92009056750823,
-        longitude: 67.1012272143364,
-        latitudeDelta: 0.1,
-        longitudeDelta: 0.1
+        latitude: -6.295493,
+        longitude: 106.729348,
+        latitudeDelta: 0.0090,
+        longitudeDelta: 0.0090,
       },
       marker: null
     }

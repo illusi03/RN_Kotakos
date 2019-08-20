@@ -19,19 +19,19 @@ export default class Wishlist extends React.Component {
         <Tabs>
           <Tab heading={
             <TabHeading style={{ backgroundColor: '#0476d9' }}>
-              <Icon name="bookmark" color='#fff' size={20} />
-              <Text style={{ color: '#fff', fontSize: 16 }}> Favorite</Text>
-            </TabHeading>
-          } >
-            <ListFavorite />
-          </Tab>
-          <Tab heading={
-            <TabHeading style={{ backgroundColor: '#0476d9' }}>
               <Icon name="list-alt" color='#fff' size={20} />
               <Text style={{ color: '#fff', fontSize: 16 }}>  Booking </Text>
             </TabHeading>
           }>
             <ListBooking />
+          </Tab>
+          <Tab heading={
+            <TabHeading style={{ backgroundColor: '#0476d9' }}>
+              <Icon name="bookmark" color='#fff' size={20} />
+              <Text style={{ color: '#fff', fontSize: 16 }}> Favorite</Text>
+            </TabHeading>
+          } >
+            <ListFavorite />
           </Tab>
         </Tabs>
       </View>

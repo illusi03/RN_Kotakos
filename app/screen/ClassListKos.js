@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHeading } from 'native-base';
+import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHeading, Item, IconNB, Input } from 'native-base';
 import Modal from "react-native-modal";
 import axios from 'axios';
 
 import CompListKost from '../component/CompListKos';
 import CompMaps from '../component/CompMaps';
 import { FlatList } from "react-native-gesture-handler";
+import MapView, { Marker } from 'react-native-maps';
 
 class ClassListKos extends Component {
 
@@ -29,7 +30,7 @@ class ClassListKos extends Component {
         })
       })
       .catch(error => { });
-      console.log(this.state.dataKos)
+    console.log(this.state.dataKos)
   }
 
   constructor() {
@@ -43,7 +44,7 @@ class ClassListKos extends Component {
           id: '1',
           name: 'Kosan Mamiroom Isma TegalRejo SATUUU',
           type: 'Putri',
-          photo: require('../assets/dummy.jpg'),
+          photo: require('../assets/dummy2.jpg'),
           room: 2,
           size: '5 x 6 m',
           price: 125000,
@@ -54,7 +55,7 @@ class ClassListKos extends Component {
           id: '2',
           name: 'Kosan Mamiroom Isma TegalRejo DUAASS',
           type: 'Campur',
-          photo: require('../assets/dummy.jpg'),
+          photo: require('../assets/dummy3.jpg'),
           room: 5,
           size: '2 x 2 m',
           price: 500000,
@@ -69,6 +70,7 @@ class ClassListKos extends Component {
   _aturHead = (noTab) => {
     if (noTab == 0) {
       return (
+        // Header Tab Maps (Dari ListKost)
         <View style={[stylesHead.cardSimpleContainer, {
           height: 55,
           width: '100%',
@@ -79,23 +81,28 @@ class ClassListKos extends Component {
           margin: 0,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          alignItems: 'center'
+          alignItems: 'center',
           //AlignItem Untuk center HORIZONTAL
         }]}>
-          <TextInput placeholder='Pencarian Berdasarkan Kota'
-            style={{
-              borderRadius: 9,
-              position: 'relative',
-              width: '100%',
-              justifyContent: 'center',
-              paddingLeft: 35
-            }}>
-          </TextInput>
-          <Icon name="search" size={30} color="#303f9f" style={{
-            position: 'absolute',
-            top: 10,
-            left: 20
-          }} />
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}
+          >
+            <Icon name="arrow-left" size={25} color="#fff" />
+          </TouchableOpacity>
+          <View style={{marginVertical:5, marginHorizontal:5,flex:1,position:'relative'}}
+          >
+            <TextInput  placeholderTextColor='#fff' placeholder='Masukan Kota' selectionColor='#000' style={{
+              backgroundColor:'#0476d9',
+              marginLeft:35,
+              color:'#fff',
+              justifyContent:'center',
+              alignItems:'flex-start',
+              fontSize:16
+            }}
+            theme={{ colors: { text: '#fff' } }}
+            ></TextInput>
+            <Icon name="search" size={25} color="#fff" style={{position:'absolute',left:10,top:12}}/>
+          </View>
+          <Icon name='cube' size={30} color='#fff' />
         </View>
       )
     } else {
@@ -121,7 +128,7 @@ class ClassListKos extends Component {
             color: '#fff',
             fontSize: 22,
             fontWeight: 'bold'
-          }}>KosCube</Text>
+          }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
       )
@@ -217,7 +224,7 @@ class ClassListKos extends Component {
                 <TouchableOpacity onPress={() => this.toggleModal()}>
                   <View style={{ flexDirection: 'row' }}>
                     <Icon name="sort" size={20} color='#fff' />
-                    <Text style={{ color: '#fff' }}> SORTING</Text>
+                    <Text style={{ color: '#fff' }}> Sorting</Text>
                   </View>
                 </TouchableOpacity>
                 {this._showModal()}

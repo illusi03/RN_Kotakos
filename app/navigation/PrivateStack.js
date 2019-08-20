@@ -14,7 +14,7 @@ const StackPrivate = createStackNavigator({
   ClassListKos: ClassListKos,
   ClassDetailKos: ClassDetailKos,
   ClassIklanTambah: ClassIklanTambah,
-  ClassDetailBooking: ClassDetailBooking
+  ClassDetailBooking: ClassDetailBooking,
 }, {
     initialRouteName: "PrivateNav",
     headerMode: 'none'

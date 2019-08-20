@@ -28,7 +28,6 @@ class ClassHome extends Component {
     position: 1,
     interval: null,
     dataSource: [
-      { url: require('../assets/slider/promo1.jpg') },
       { url: require('../assets/slider/promo2.jpg') },
       { url: require('../assets/slider/promo3.jpg') },
       { url: require('../assets/slider/promo4.jpg') },
@@ -136,7 +135,7 @@ class ClassHome extends Component {
                     position={this.state.position}
                     onPositionChanged=
                     {position => this.setState({ position })}
-                    containerStyle={{ resideMode: 'center' }}
+                    containerStyle={{ resideMode: 'contain' }}
                   />
                 </View>
               </View>

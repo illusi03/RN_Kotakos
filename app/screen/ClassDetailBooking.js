@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Button, TextInput, Image, ScrollView } from 'react-native';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import DateTimePicker from "react-native-modal-datetime-picker";
-import { Picker } from 'react-native-picker-dropdown'
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import { Checkbox } from 'react-native-paper';
+import RNPickerSelect from 'react-native-picker-select';
+import DateTimePicker from "react-native-modal-datetime-picker";
 
-import CompHeader from '../component/CompHeader'
+
 
 export default class ClassDetailBooking extends Component {
 
@@ -63,7 +64,7 @@ export default class ClassDetailBooking extends Component {
             color: '#fff',
             fontSize: 22,
             fontWeight: 'bold'
-          }}>KosCube</Text>
+          }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
         <View style={{
@@ -86,17 +87,29 @@ export default class ClassDetailBooking extends Component {
           padding: 5,
           paddingTop: 20
         }}>
+
           {/* Isi Konten 1 */}
           <View style={{
-            flexDirection: 'row'
+            flexDirection: 'row',
+            paddingBottom: 15
           }}>
             <View style={{
               flex: 2,
               paddingHorizontal: 3,
               alignItems: 'center'
             }}>
-              <TouchableOpacity style={{ flexDirection: 'column' }}>
-                <Text style={{ color: '#000', paddingBottom: 10 }}>Tanggal Masuk</Text>
+
+              {/* Komponen Calendar Visible  */}
+              <DateTimePicker
+                isVisible={this.state.isDateTimePickerVisible}
+                onConfirm={this.handleDatePicked}
+                onCancel={this.hideDateTimePicker}
+              />
+
+              <TouchableOpacity style={{ flexDirection: 'column' }}
+                onPress={this.showDateTimePicker}
+              >
+                <Text style={{ color: '#000', paddingBottom: 13 }}>Tanggal Masuk</Text>
                 <View style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
@@ -105,9 +118,10 @@ export default class ClassDetailBooking extends Component {
                     color: '#000',
                     fontSize: 18,
                     fontWeight: 'bold',
-                    borderBottomWidth: 0.8,
+                    borderBottomWidth: 1,
                     borderColor: '#000',
-                    marginRight: 15
+                    marginRight: 15,
+                    paddingBottom:10
                   }}>
                     18 April 2019
                   </Text>
@@ -118,64 +132,32 @@ export default class ClassDetailBooking extends Component {
             <View style={{
               flex: 2,
               paddingHorizontal: 3,
-              alignItems: 'center'
+
             }}>
-              <TouchableOpacity style={{ flexDirection: 'column' }}>
-                <Text style={{ color: '#000', paddingBottom: 10 }}>Tanggal Keluar</Text>
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start'
-                }}>
-                  <Text style={{
-                    color: '#000',
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    borderBottomWidth: 0.8,
-                    borderColor: '#000',
-                    marginRight: 15
-                  }}>
-                    18 Mei 2019
-                  </Text>
-                  <Icon name='calendar' size={16} color='#0476d9'></Icon>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{
-            alignItems: 'center'
-          }}>
-            <View style={{ flexDirection: 'column', marginTop: 10, alignItems: 'center' }}>
-              <Text style={{ color: '#000', fontWeight: 'bold' }}>Durasi Kos</Text>
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start'
-              }}>
-                <Picker
-                  selectedValue={this.state.durasiKos}
-                  style={{ height: 50, width: 200 }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ durasiKos: itemValue })
-                  }
-                  itemTextStyle={{ fontSize: 15 }}
-                  activeItemTextStyle={{ fontSize: 18, fontWeight: 'bold' }}
-                >
-                  <Picker.Item label="1 Bulan" value="1_Bulan" />
-                  <Picker.Item label="2 Bulan" value="2_Bulan" />
-                  <Picker.Item label="3 Bulan" value="3_Bulan" />
-                  <Picker.Item label="1 Tahun" value="1_Tahun" />
-                </Picker>
+              <View style={{ flexDirection: 'column', marginRight: 20 }}>
+                <Text style={{ color: '#000', paddingBottom: 0 }}>Durasi Kos (Bulan)</Text>
+                {/* <RNPickerSelect
+                  onValueChange={(value) => console.log(value)}
+                  items={[
+                    { label: '1 Bulan', value: '1' },
+                    { label: '2 Bulan', value: '2' },
+                    { label: '3 Bulan', value: '3' },
+                  ]}
+                /> */}
+                <TextInput style={{
+                  color: '#000',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  borderBottomWidth: 1,
+                  borderColor: '#000',
+                  marginRight: 15
+                }} keyboardType='numeric'>
+                  </TextInput>
               </View>
             </View>
           </View>
 
           {/* Isi Konten 2 Separator  */}
-          <View style={{
-            backgroundColor: '#000',
-            borderColor: '#000',
-            borderWidth: 0.3,
-            marginHorizontal: 15,
-            marginBottom: 15
-          }}></View>
           <View style={{
             marginHorizontal: 15,
             height: 100,
@@ -211,15 +193,15 @@ export default class ClassDetailBooking extends Component {
                 alignItems: 'center',
                 flexDirection: 'row'
               }}>
-                <Icon name='search' size={18} color='#0476d9'></Icon>
+                <Icon name='bed' size={18} color='#0476d9'></Icon>
+                <Icon name='toilet' size={18} color='#0476d9'
+                  style={{ paddingLeft: 15 }}></Icon>
+                <Icon name='wifi' size={18} color='#0476d9'
+                  style={{ paddingLeft: 15 }}></Icon>
                 <Icon name='search' size={18} color='#0476d9'
-                  style={{ paddingLeft: 5 }}></Icon>
-                <Icon name='search' size={18} color='#0476d9'
-                  style={{ paddingLeft: 5 }}></Icon>
-                <Icon name='search' size={18} color='#0476d9'
-                  style={{ paddingLeft: 5 }}></Icon>
-                <Icon name='search' size={18} color='#0476d9'
-                  style={{ paddingLeft: 5 }}></Icon>
+                  style={{ paddingLeft: 15 }}></Icon>
+                <Icon name='key' size={18} color='#0476d9'
+                  style={{ paddingLeft: 15 }}></Icon>
               </View>
               <Text style={{
                 fontSize: 17,
@@ -229,15 +211,6 @@ export default class ClassDetailBooking extends Component {
               >Rp. 1.250.000 / Bulan</Text>
             </View>
           </View>
-          {/* Separator  */}
-          <View style={{
-            backgroundColor: '#000',
-            borderColor: '#000',
-            borderWidth: 0.3,
-            marginHorizontal: 15,
-            marginTop: 15,
-            marginBottom: 10
-          }}></View>
 
           {/* End konten isi 2 */}
           <View style={{
@@ -247,9 +220,18 @@ export default class ClassDetailBooking extends Component {
             flex: 1,
             flexDirection: 'column'
           }}>
+            {/* Separator  */}
+            <View style={{
+              backgroundColor: '#000',
+              borderColor: '#000',
+              borderWidth: 0.3,
+              marginHorizontal: 15,
+              marginTop: 15,
+              marginBottom: 10
+            }}></View>
             <View style={{
               flexDirection: 'row',
-              justifyContent: 'space-between'
+              justifyContent: 'flex-start'
             }}>
               <Text style={{
                 fontSize: 17,
@@ -257,18 +239,7 @@ export default class ClassDetailBooking extends Component {
                 color: '#000'
               }}
               >Data Penghuni</Text>
-              <TouchableOpacity style={{
-                backgroundColor: '#0476d9',
-                borderRadius: 7,
-                padding: 5
-              }}>
-                <Text style={{
-                  fontSize: 17,
-                  fontWeight: '500',
-                  color: '#fff'
-                }}
-                >Edit</Text>
-              </TouchableOpacity>
+
             </View>
             <View style={{
               flexDirection: 'row',
@@ -340,13 +311,14 @@ export default class ClassDetailBooking extends Component {
               >Wiraswasta</Text>
             </View>
 
-            {/* Separator */}
+            {/* Separator  */}
             <View style={{
               backgroundColor: '#000',
               borderColor: '#000',
               borderWidth: 0.3,
               marginHorizontal: 15,
-              marginBottom: 5
+              marginTop: 15,
+              marginBottom: 10
             }}></View>
             <View style={{
               flexDirection: 'row',
@@ -367,16 +339,18 @@ export default class ClassDetailBooking extends Component {
               >Saya menyetujui SYARAT KETENTUAN dan memastikan data diatas adalah Benar.</Text>
             </View>
             <View style={{
-              
+
             }}>
               <Button title="Book"
-              disabled={!isCheckedAgree}
-              style={{
-                width:'100%',
-                justifyContent:'center',
-                alignItems:'center',
-                fontSize:18,
-              }}>
+                disabled={!isCheckedAgree}
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  fontSize: 18,
+                }}
+                onPress={() => this.props.navigation.navigate('Wishlist')}
+              >
               </Button>
             </View>
           </View>

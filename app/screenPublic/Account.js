@@ -69,7 +69,7 @@ class ClassAccount extends Component {
             color: '#fff',
             fontSize: 22,
             fontWeight: 'bold'
-          }}>KosCube</Text>
+          }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
 

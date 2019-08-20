@@ -14,9 +14,11 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import MapView, { Marker } from 'react-native-maps';
 
+import CompFeatured from '../component/CompFeatured'
 import CompKamarMenarik from '../component/CompKamarMenarik';
-import CompMaps from '../component/CompMaps';
+// import CompMaps from '../component/CompMaps';
 
 class ClassDetailKos extends Component {
   constructor() {
@@ -63,28 +65,10 @@ class ClassDetailKos extends Component {
       return (
         <View>
           <View style={{ position: 'relative', paddingBottom: 0 }}>
-            <Image source={this.props.navigation.getParam('itemNya').photo} style={{ height: 200, width: '100%', borderRadius: 7, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+            <Image source={this.props.navigation.getParam('itemNya').photo} style={{ height: 200, width: '100%' }} />
             {/* <TouchableOpacity onPress={() => alert('Tes')} style={{ position: 'absolute', right: 10, top: 5 }}>
               <Icon name="star" size={35} color='#ffffff' />
             </TouchableOpacity> */}
-          </View>
-          <View style={{ flexDirection: 'row', backgroundColor: '#1b2836', padding: 5, height: 50 }}>
-            <TouchableOpacity onPress={() => this._aksiPetaView(0)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Icon name="image" size={25} color='#fff' />
-              <Text style={{ color: '#fff' }}> Foto</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this._aksiPetaView(1)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Icon name="map-marker-alt" size={25} color='#00a0d6' />
-              <Text style={{ color: '#00a0d6' }}> Peta</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <View style={{ height: 200, width: '100%', position: 'relative', paddingBottom: 0 }}>
-            <CompMaps />
           </View>
           <View style={{ flexDirection: 'row', backgroundColor: '#1b2836', padding: 5, height: 50 }}>
             <TouchableOpacity onPress={() => this._aksiPetaView(0)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -94,6 +78,47 @@ class ClassDetailKos extends Component {
             <TouchableOpacity onPress={() => this._aksiPetaView(1)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="map-marker-alt" size={25} color='#fff' />
               <Text style={{ color: '#fff' }}> Peta</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <View style={{ height: 200, width: '100%', position: 'relative', paddingBottom: 0 }}>
+            {/* <CompMaps /> */}
+            <MapView style={{
+              width: '100%',
+              height: '100%'
+            }}
+              region={
+                {
+                  latitude: -6.295493,
+                  longitude: 106.729348,
+                  latitudeDelta: 0.0090,
+                  longitudeDelta: 0.0090,
+                }
+              }>
+              <Marker
+                coordinate={
+                  {
+                    latitude: -6.295493,
+                    longitude: 106.729348
+                  }
+                }
+                title='Kost'
+                description='Lokasi Kosan Yang dituju'
+              />
+            </MapView>
+          </View>
+          <View style={{ flexDirection: 'row', backgroundColor: '#1b2836', padding: 5, height: 50 }}>
+            <TouchableOpacity onPress={() => this._aksiPetaView(0)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Icon name="image" size={25} color='#fff' />
+              <Text style={{ color: '#fff' }}> Foto</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this._aksiPetaView(1)} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Icon name="map-marker-alt" size={25} color='#00a0d6' />
+              <Text style={{ color: '#00a0d6' }}> Peta</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -139,7 +164,7 @@ class ClassDetailKos extends Component {
                 fontSize: 22,
                 fontWeight: 'bold',
                 paddingLeft: 20
-              }}>KosYu
+              }}>KotaKos
               </Text>
             </View>
             <View style={{
@@ -229,17 +254,15 @@ class ClassDetailKos extends Component {
                       paddingVertical: 5,
                       fontWeight: 'bold'
                     }}>Deskripsi Kos</Text>
-                    <Text>Cupidatat cupidatat ad fugiat qui sint occaecat. Proident eiusmod reprehenderit in aliqua adipisicing deserunt cupidatat. Duis magna id consectetur exercitation in nulla duis officia ullamco nostrud quis consequat consectetur elit. Esse dolore pariatur officia occaecat. Quis do officia consectetur cupidatat eiusmod velit fugiat proident voluptate adipisicing esse deserunt id.</Text>
+                    <Text style={{
+                       color:'#000'
+                    }}>Cupidatat cupidatat ad fugiat qui sint occaecat. Proident eiusmod reprehenderit in aliqua adipisicing deserunt cupidatat. Duis magna id consectetur exercitation in nulla duis officia ullamco nostrud quis consequat consectetur elit. Esse dolore pariatur officia occaecat. Quis do officia consectetur cupidatat eiusmod velit fugiat proident voluptate adipisicing esse deserunt id.</Text>
                   </View>
 
                   {/* Sparator */}
                   <View style={{ borderColor: 'black', borderWidth: 0.2 }} />
-                  <View style={{ flexDirection: 'row', paddingVertical: 5, justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'row', paddingVertical: 5, justifyContent: 'flex-start' }}>
                     <Text style={{ fontSize: 18, color: 'black' }}>Fasilitas kost dan kamar</Text>
-                    <TouchableOpacity style={[{ justifyContent: 'center', alignItems: 'center' }]}
-                    >
-                      <Text style={{ fontSize: 18, color: 'black' }}>Lihat Semua</Text>
-                    </TouchableOpacity>
                   </View>
 
                   <View style={{ flexDirection: 'row', paddingVertical: 25, paddingHorizontal: 15, alignItems: 'center' }}>
@@ -264,90 +287,36 @@ class ClassDetailKos extends Component {
                   {/* Sparator */}
                   <View style={{ borderColor: 'black', borderWidth: 0.2 }} />
                   <View style={{ flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 5 }}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 18, color: 'black', marginHorizontal: 15 }}>Kebersihan</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 18, color: 'black', marginHorizontal: 15 }}>Kenyamanan</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
+                    <CompFeatured title='Kebersihan'></CompFeatured>
+                    <CompFeatured title='Kenyamanan'></CompFeatured>
                   </View>
                   <View style={{ flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 5 }}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 18, color: 'black', marginHorizontal: 15 }}>Keamanan</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 18, color: 'black', marginHorizontal: 15 }}>Harga</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
+                    <CompFeatured title='Keamanan'></CompFeatured>
+                    <CompFeatured title='Harga'></CompFeatured>
                   </View>
                   <View style={{ flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 5 }}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ textAlign: 'center', fontSize: 18, color: 'black', marginHorizontal: 15 }}>Fasilitas Kamar</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Text style={{ textAlign: 'center', fontSize: 18, color: 'black', marginHorizontal: 15 }}>Fasilitas Umum</Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                        <Icon name="star" size={12} color='black' style={{ marginHorizontal: 2 }} />
-                      </View>
-                    </View>
+                    <CompFeatured title='Fasilitas Kamar'></CompFeatured>
+                    <CompFeatured title='Fasilitas Umum'></CompFeatured>
                   </View>
                   <View style={[styles.cardSimpleContainer, { backgroundColor: '#fff', flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 3 }]}>
-                    <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', marginRight: 15 }}>
+                    <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center', marginRight: 10 }}>
                       <Icon name='user-circle' size={40} color='#0476d9' />
                     </View>
-                    <View style={{ flex: 4, paddingLeft: 3 }}>
-                      <Text style={{ fontSize: 15 }}>Pemilik Kos</Text>
-                      <Text style={{ fontSize: 15 }}>Vera</Text>
-                      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>085224242412</Text>
+                    <View style={{ flex: 6, paddingLeft: 2 }}>
+                      <Text style={{ fontSize: 15, color:'#000'}}>Pemilik Kos</Text>
+                      <Text style={{ fontSize: 15 , color:'#000'}}>Vera</Text>
+                      <Text style={{ fontSize: 18, fontWeight: 'bold' , color:'#000'}}>085224242412</Text>
                     </View>
-                    <TouchableOpacity style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+                    {/* <TouchableOpacity style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
                       <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Minta Nomor</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 </View>
                 {/* Kosan Menarik Lainya */}
                 <ScrollView horizontal={true}>
-                  <CompKamarMenarik />
-                  <CompKamarMenarik />
-                  <CompKamarMenarik />
+                  <CompKamarMenarik room={3} title='Kosan Dahlia ' />
+                  <CompKamarMenarik room={3} title='Kosan Dahlia ' />
+                  <CompKamarMenarik room={3} title='Kosan Dahlia ' />
                 </ScrollView>
               </View>
             </View>
@@ -357,12 +326,12 @@ class ClassDetailKos extends Component {
           <View style={[styles.cardSimpleContainer, {
             borderColor: '#303f9f',
             borderWidth: 2,
-            paddingHorizontal: 5,
+            paddingHorizontal: 10,
             backgroundColor: '#fff',
             flexDirection: 'row',
-            height: 50, width: '95%',
+            height: 65, width: '95%',
             position: 'absolute',
-            left: '2.5%',
+            left: '2%',
             right: 0,
             bottom: 0,
             justifyContent: 'space-between',
@@ -372,13 +341,13 @@ class ClassDetailKos extends Component {
               <View>
                 <Text style={{
                   fontWeight: 'bold',
-                  fontSize: 15,
+                  fontSize: 17,
                   color: '#000'
                 }}>Rp. {item.price} / Bulan</Text>
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#000'
-                }} >Lihat Semua Harga</Text>
+                }} >Pesan Sekarang?</Text>
               </View>
             </View>
             <View style={{

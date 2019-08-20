@@ -12,12 +12,7 @@ import Home from "./app/screen/Home";
 
 
 const AppNavigator = createSwitchNavigator({
-  PrivateStack: {
-    screen: PrivateStack,
-    navigationOptions: {
-      header: null,
-    }
-  },
+  PrivateStack: PrivateStack,
   PublicStack: {
     screen: PublicStack,
     navigationOptions: {

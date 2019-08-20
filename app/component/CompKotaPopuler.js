@@ -12,7 +12,7 @@ import {
 class CompKotaPopuler extends Component {
   render() {
     return (
-      <TouchableOpacity onPress={() => alert('tess')}>
+      <TouchableOpacity onPress={() => alert('Belum Selesai')}>
         <View style={[styles.cardSimpleContainer, styles.itemKolom, { margin: 0, height: 150, width: 100, borderRadius: 15 }]}>
           <Image source={this.props.dataItem.uriImage} style={{ position: 'relative', width: '100%', height: '100%', borderRadius: 5, resizeMode: 'stretch' }} />
           <Text style={{ borderColor:'blue', color: '#fff', position: 'absolute', bottom: 10, left: 10, fontSize: 15, fontWeight: 'bold' }}>

@@ -8,6 +8,8 @@ import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHe
 import CompMaps from '../component/CompMaps';
 import CompTextInput from '../component/CompTextInputIklan';
 
+import MapView,{Marker} from 'react-native-maps';
+
 class ClassIklanTambah extends Component {
   static navigationOptions = {
     title: 'Kosyu',
@@ -44,7 +46,7 @@ class ClassIklanTambah extends Component {
             color: '#fff',
             fontSize: 22,
             fontWeight: 'bold'
-          }}>KosCube</Text>
+          }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
 
@@ -79,7 +81,7 @@ class ClassIklanTambah extends Component {
             <View style={{
               height: 250
             }}>
-              <CompMaps />
+              {/* <CompMaps /> */}
             </View>
             <View style={{
               flexDirection: 'row'

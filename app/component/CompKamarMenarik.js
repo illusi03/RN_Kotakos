@@ -17,7 +17,12 @@ class CampKamarMenarik extends Component {
           fontWeight: 'bold',
           fontSize: 17,
           color: 'green'
-        }}>Ada 3 Kamar</Text>
+        }}>Tersedia {this.props.room} Kamar</Text>
+        <Text style={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: 14,
+        }}>{this.props.title}</Text>
         <TouchableOpacity style={{
           flex: 4,
           height: '50%',

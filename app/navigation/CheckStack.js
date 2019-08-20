@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import { Button } from 'react-native-paper'
 
-import PrivateNav from '../navigation/PrivateNav';
-import ClassHome from '../screen/Home';
-import ClassListKos from '../screen/ClassListKos';
-import ClassDetailKos from '../screen/ClassDetailKos';
-import ClassIklanTambah from '../screen/ClassIklanTambah';
-import ClassDetailBooking from '../screen/ClassDetailBooking';
+// import PrivateNav from '../navigation/PrivateNav';
+// import ClassHome from '../screen/Home';
+// import ClassListKos from '../screen/ClassListKos';
+// import ClassDetailKos from '../screen/ClassDetailKos';
+// import ClassIklanTambah from '../screen/ClassIklanTambah';
+// import ClassDetailBooking from '../screen/ClassDetailBooking';
 
 class CheckStack extends Component {
   constructor(props) {
@@ -26,7 +26,6 @@ class CheckStack extends Component {
     this._bootstrapAsync();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     // const userToken = await AsyncStorage.getItem('userObj');
     const userToken = false;
