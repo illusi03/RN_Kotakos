@@ -23,8 +23,32 @@ import ClassIklanTambah from './ClassIklanTambah';
 import ClassDetailBooking from './ClassDetailBooking';
 import ChatScreen from './ChatScreen'
 
+import AsyncStorage from '@react-native-community/async-storage';
+
+
 class ClassHome extends Component {
+
+
+  componentDidMount(){
+    this._cekLogin();
+  }
+
+  _cekLogin = async () => {
+    const fetchDataMentah = await AsyncStorage.getItem('userToken');
+    if (fetchDataMentah) {
+      this.setState({
+        udahLogin:true
+      })
+    }else{
+      this.setState({
+        udahLogin:false
+      })
+    }
+  }
+
   state = {
+    udahLogin : false,
+
     position: 1,
     interval: null,
     dataSource: [
@@ -155,7 +179,14 @@ class ClassHome extends Component {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Button mode='outlined' style={[{ color: 'white', backgroundColor: 'transparent', borderColor: 'white', borderWidth: 2, fontColor: 'white' }]}
-                    onPress={() => this.props.navigation.navigate('ClassIklanTambah')}
+                    onPress={()=>{
+                      if(this.state.udahLogin){
+                        this.props.navigation.navigate('ClassIklanTambah')
+                      }else{
+                        this.props.navigation.navigate('ClassLogin')
+                      }
+                      // alert(this.state.udahLogin)
+                    }}
                   >
                     <Text style={{ color: 'white' }}>Pasang</Text>
                   </Button>

@@ -18,9 +18,14 @@ import CompListKost from '../component/CompListKos';
 import CompMaps from '../component/CompMaps';
 import { FlatList } from "react-native-gesture-handler";
 import MapView, { Marker } from 'react-native-maps';
+import ActionSheet from 'react-native-actionsheet'
+
 
 class ClassListKos extends Component {
 
+  showActionSheet = () => {
+    this.ActionSheet.show()
+  }
 
   componentDidMount() {
     axios.get('https://192.168.0.23:5000/api/v1/dorms')
@@ -88,19 +93,19 @@ class ClassListKos extends Component {
           >
             <Icon name="arrow-left" size={25} color="#fff" />
           </TouchableOpacity>
-          <View style={{marginVertical:5, marginHorizontal:5,flex:1,position:'relative'}}
+          <View style={{ marginVertical: 5, marginHorizontal: 5, flex: 1, position: 'relative' }}
           >
-            <TextInput  placeholderTextColor='#fff' placeholder='Masukan Kota' selectionColor='#000' style={{
-              backgroundColor:'#0476d9',
-              marginLeft:35,
-              color:'#fff',
-              justifyContent:'center',
-              alignItems:'flex-start',
-              fontSize:16
+            <TextInput placeholderTextColor='#fff' placeholder='Masukan Kota' selectionColor='#000' style={{
+              backgroundColor: '#0476d9',
+              marginLeft: 35,
+              color: '#fff',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              fontSize: 16
             }}
-            theme={{ colors: { text: '#fff' } }}
+              theme={{ colors: { text: '#fff' } }}
             ></TextInput>
-            <Icon name="search" size={25} color="#fff" style={{position:'absolute',left:10,top:12}}/>
+            <Icon name="search" size={25} color="#fff" style={{ position: 'absolute', left: 10, top: 12 }} />
           </View>
           <Icon name='cube' size={30} color='#fff' />
         </View>
@@ -220,8 +225,15 @@ class ClassListKos extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
               }]}>
-
-                <TouchableOpacity onPress={() => this.toggleModal()}>
+                <ActionSheet
+                  ref={o => this.ActionSheet = o}
+                  title={'Urutkan Berdasarkan'}
+                  options={['Herga Termurah', 'Harga Termahal','Jenis Kos']}
+                  onPress={(index) => { 
+                    alert(index)
+                  }}
+                />
+                <TouchableOpacity onPress={this.showActionSheet} >
                   <View style={{ flexDirection: 'row' }}>
                     <Icon name="sort" size={20} color='#fff' />
                     <Text style={{ color: '#fff' }}> Sorting</Text>

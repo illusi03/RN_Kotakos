@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 import PublicNav from '../navigation/PublicNav';
-import ClassAccount from '../screenPublic/Account';
+import ClassLogin from '../screenPublic/Login';
 import ClassRegister from '../screenPublic/Register';
 import PrivateStack from './PrivateStack';
 
@@ -16,7 +16,7 @@ import ClassDetailBooking from '../screen/ClassDetailBooking';
 
 const StackPublic = createStackNavigator({
   PublicNav:PublicNav,
-  ClassAccount: ClassAccount,
+  ClassLogin: ClassLogin,
   ClassRegister: ClassRegister,
 
   //Tambahan Navigate (Supaya Navbar Tidak Nimpah Ke Private)

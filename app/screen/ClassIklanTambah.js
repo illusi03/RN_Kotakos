@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import { Appbar, Button, Text } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,9 +8,18 @@ import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHe
 import CompMaps from '../component/CompMaps';
 import CompTextInput from '../component/CompTextInputIklan';
 
-import MapView,{Marker} from 'react-native-maps';
+import MarkerNya from '../assets/icon/icon_marker.png'
+import MapView, { Marker } from 'react-native-maps';
 
 class ClassIklanTambah extends Component {
+  state = {
+    region: {
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.025,
+      longitudeDelta: 0.025,
+    }
+  }
   static navigationOptions = {
     title: 'Kosyu',
     header: null,
@@ -22,6 +31,12 @@ class ClassIklanTambah extends Component {
       fontWeight: 'bold',
     }
   };
+
+  onRegionChange = (region)=> {
+    this.setState({ region });
+  }
+
+
   render() {
     return (
       <View>
@@ -82,6 +97,19 @@ class ClassIklanTambah extends Component {
               height: 250
             }}>
               {/* <CompMaps /> */}
+
+              <MapView style={{
+                width: '100%',
+                height: '100%'
+              }}
+                initialRegion={this.state.region}
+                onRegionChangeComplete={this.onRegionChange}>
+                <View style={styles.markerFixed}>
+                  <Image style={styles.markerNya} source={MarkerNya} />
+                </View>
+              </MapView>
+
+
             </View>
             <View style={{
               flexDirection: 'row'
@@ -170,6 +198,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 5,
     backgroundColor: '#e6eefc'
+  },
+  markerFixed: {
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%'
+  },
+  markerNya: {
+    height: 48,
+    width: 48
   },
   cardContainer: {
     marginVertical: 5

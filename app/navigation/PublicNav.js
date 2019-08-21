@@ -4,24 +4,24 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import Home from '../screen/Home'
-import Account from '../screenPublic/Account'
+import Login from '../screenPublic/Login'
 
 const PublicNav = createBottomTabNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
-      tabBarLabel: 'Home',
+      tabBarLabel: 'Beranda',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="ios-home" color={tintColor} size={25} />
       )
     }
   },
-  Account: {
-    screen: Account,
+  Login: {
+    screen: Login,
     navigationOptions: {
-      tabBarLabel: 'Account',
+      tabBarLabel: 'Autentikasi',
       tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-key" color={tintColor} size={25} />
+        <Icon name="ios-contact" color={tintColor} size={25} />
       )
     }
   }

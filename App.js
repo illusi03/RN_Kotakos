@@ -13,18 +13,8 @@ import Home from "./app/screen/Home";
 
 const AppNavigator = createSwitchNavigator({
   PrivateStack: PrivateStack,
-  PublicStack: {
-    screen: PublicStack,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  CheckStack: {
-    screen: CheckStack,
-    navigationOptions: {
-      header: null,
-    }
-  }
+  PublicStack:PublicStack,
+  CheckStack:CheckStack
 }, {
     initialRouteName: 'CheckStack'
   })

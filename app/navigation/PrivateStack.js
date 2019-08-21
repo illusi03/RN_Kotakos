@@ -20,12 +20,6 @@ const StackPrivate = createStackNavigator({
     headerMode: 'none'
   });
 
-class PrivateStack extends Component {
-  render() {
-    return (
-      <ContainerPrivate />
-    );
-  }
-}
+
 //export default App;
 export default StackPrivate;

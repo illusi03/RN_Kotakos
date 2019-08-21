@@ -9,49 +9,75 @@ import {
   TouchableOpacity,
   SafeAreaView,
   FlatList,
-  AsyncStorage
+
 } from "react-native";
 import { Button } from 'react-native-paper'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
-import ClassRegister from './Register';
+class ClassLogin extends Component {
 
-class ClassAccount extends Component {
-  state = {
-    textUsername : '',
-    textPass : '',
-    userObj : ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      textUsername: '',
+      textPass: '',
+      userToken: '',
+      tempUserFetch: ''
+    }
   }
-
+  componentDidMount() {
+    axios.get('http://192.168.0.23:5000/api/v1/users')
+      .then(response => {
+        this.setState({
+          tempUserFetch: response.data
+        })
+      })
+      .catch(error => {
+        alert(error)
+      });
+  }
   _aksiHandleTextUsername = (text) => {
     this.setState({
-      textUsername:text
+      textUsername: text
     })
   }
   _aksiHandleTextPass = (text) => {
     this.setState({
-      textPass:text
+      textPass: text
     })
   }
-  seleksiLogin = () =>{
-    this.setState({
-      userObj : {
-        username : this.state.textUsername,
-        password : this.state.textPass
+  seleksiLogin = async () => {
+    try {
+      //Fetch Data USERNAME dan PASSWORD API , LALU PENGECEKAN , JIKA MATCH BERI TOKEN
+      let tempUser = {
+        username: this.state.textUsername,
+        password: this.state.textPass
       }
-    })
-    //Syntax Untuk Memasukan State Ke ASYNC STORAGE
-    this.props.navigation.navigate('PrivateStack')
-    // this._loginAsync(this.state.userObj)
+      await axios.post("http://192.168.0.23:5000/api/v1/login", {
+        username: tempUser.username,
+        password: tempUser.password
+      })
+        .then((response) => {
+          if (typeof response.data.token !== 'undefined') {
+            AsyncStorage.setItem('userToken', response.data.token);
+            this.props.navigation.navigate('PrivateStack')
+          } else {
+            alert('Gagal Login')
+          }
+        })
+        .catch((error) => {
+          alert(error)
+        });
+    }
+    catch (e) { }
   }
-  _loginAsync = async (userObjNya)=> {
-    await AsyncStorage.setItem('userObj', userObjNya)
-  } 
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={[styles.cardSimpleContainer, {
           height: 55,
           width: '100%',
@@ -76,7 +102,7 @@ class ClassAccount extends Component {
         <View style={{
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop:25,
+          marginTop: 25,
         }}>
           <Image source={require('../assets/illustrator/login.png')} style={{
             width: 150,
@@ -90,7 +116,8 @@ class ClassAccount extends Component {
             textAlign: 'center',
             paddingHorizontal: 50,
             marginBottom: 5
-          }}>Silakan Login Untuk Menikmati Fitur Fitur Yang Lebih Lengkap</Text>
+          }}>Silakan Login Untuk Menikmati Fitur Fitur Yang Lebih Lengkap
+          </Text>
         </View>
 
         <View style={{
@@ -148,7 +175,8 @@ class ClassAccount extends Component {
               marginHorizontal: 20,
               width: 125
             }}
-            onPress={this.seleksiLogin}
+              onPress={() => this.seleksiLogin()}
+            // onPress={() => this.props.navigation.navigate('PrivateStack')}
             >
               <Text>Login</Text>
             </Button>
@@ -164,7 +192,7 @@ class ClassAccount extends Component {
             </Button>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -188,4 +216,4 @@ const styles = StyleSheet.create({
     elevation: 2
   }
 });
-export default ClassAccount;
+export default ClassLogin;

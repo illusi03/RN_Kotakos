@@ -10,15 +10,19 @@ import {
   Alert
 } from 'react-native';
 import {Button} from 'react-native-paper'
+import AsyncStorage from '@react-native-community/async-storage';
 
 import CompHeader from '../component/CompHeader';
 
 class Profile extends React.Component {
 
   _logoutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('ClassAccount');
+    try {
+      await AsyncStorage.clear()
+    } catch(e) {}
+    this.props.navigation.navigate('PublicStack')
   };
+
 
   render() {
     return (
@@ -31,7 +35,7 @@ class Profile extends React.Component {
           justifyContent:'center'
         }}>
           <Text>Profile Screen</Text>
-          <Button mode='contained' onPress={()=> this.props.navigation.navigate('PublicStack')}>
+          <Button mode='contained' onPress={()=> this._logoutAsync()}>
             <Text>Logout</Text>
           </Button>
         </View>

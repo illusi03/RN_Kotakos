@@ -3,6 +3,8 @@ package com.empat;
 import android.app.Application;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.burnweb.rnsendintent.RNSendIntentPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -27,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AsyncStoragePackage(),
+            new RNSendIntentPackage(),// <------ add this line to your MainApplication class 
             new MapsPackage(),
             new ReanimatedPackage(),
             new RNGestureHandlerPackage(),

@@ -138,6 +138,8 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_async-storage')
+    implementation project(':react-native-send-intent')
     implementation project(':react-native-maps')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-gesture-handler')
@@ -151,6 +153,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-base:10.0.1'
     implementation 'com.google.android.gms:play-services-maps:10.0.1'
 }
+    implementation project(':RNSendIntentModule')
 }
 
 // Run this once to be able to run the application with BUCK

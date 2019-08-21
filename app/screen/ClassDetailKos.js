@@ -20,13 +20,42 @@ import CompFeatured from '../component/CompFeatured'
 import CompKamarMenarik from '../component/CompKamarMenarik';
 // import CompMaps from '../component/CompMaps';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
+
+var SendIntentAndroid = require('react-native-send-intent');
+ 
+
+
 class ClassDetailKos extends Component {
+  componentDidMount(){
+    this._cekLogin();
+  }
+  _cekLogin = async () => {
+    const fetchDataMentah = await AsyncStorage.getItem('userToken');
+    if (fetchDataMentah) {
+      this.setState({
+        udahLogin:true
+      })
+    }else{
+      this.setState({
+        udahLogin:false
+      })
+    }
+  }
+
   constructor() {
     super();
     this.state = {
-      isFotoState: true
+      isFotoState: true,
+      udahLogin : false
     };
   }
+
+  aksiHubKos = ()=>{
+    SendIntentAndroid.sendPhoneDial('085224242412', false);
+  }
+
   static navigationOptions = {
     title: 'Detail Kos',
     headerStyle: {
@@ -363,7 +392,9 @@ class ClassDetailKos extends Component {
                 alignItems: 'center',
                 padding: 5,
                 borderColor: '#0476d9'
-              }}>
+              }}
+              // onPress={this.aksiHubKos}
+              >
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#fff'
@@ -378,7 +409,13 @@ class ClassDetailKos extends Component {
                 padding: 5,
                 borderColor: '#0476d9'
               }}
-                onPress={() => this.props.navigation.navigate('ClassDetailBooking')}
+                onPress={()=> {
+                    if(this.state.udahLogin){
+                      this.props.navigation.navigate('ClassDetailBooking')
+                    }else{
+                      this.props.navigation.navigate('ClassLogin')
+                    }
+                  }}
               >
                 <Text style={{
                   fontWeight: 'bold',

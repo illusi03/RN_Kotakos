@@ -10,10 +10,12 @@ import {
   SafeAreaView
 } from "react-native";
 
+
 //List PropsNya
 // paramNavigate = Navigate ke CLassDetailKos
 // item = list ItemNya
 class CompListKos extends Component {
+
   render() {
     return (
       <View style={{ padding: 15, paddingBottom: 20 }}>

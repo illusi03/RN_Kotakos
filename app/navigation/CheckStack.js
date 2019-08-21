@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import {
   ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
   Text
 } from "react-native";
 import { Button } from 'react-native-paper'
+import AsyncStorage from '@react-native-community/async-storage';
 
 // import PrivateNav from '../navigation/PrivateNav';
 // import ClassHome from '../screen/Home';
@@ -18,30 +18,36 @@ import { Button } from 'react-native-paper'
 // import ClassDetailBooking from '../screen/ClassDetailBooking';
 
 class CheckStack extends Component {
+  state = {
+    isLogin: 'false',
+    bagus: ''
+  }
   constructor(props) {
     super(props);
-    this.state = {
-      isLogin: 'false'
-    }
+    this.isLogin
+    // alert('Tess')
     this._bootstrapAsync();
   }
-
   _bootstrapAsync = async () => {
-    // const userToken = await AsyncStorage.getItem('userObj');
-    const userToken = false;
-    this.props.navigation.navigate(userToken ? 'PrivateStack' : 'PublicStack');
+    try {
+      const fetchDataMentah = await AsyncStorage.getItem('userToken');
+      if (fetchDataMentah != null) {
+        this.props.navigation.navigate('PrivateStack')
+      } else {
+        this.props.navigation.navigate('PublicStack')
+      }
+    } catch (e) {
+      alert(e)
+    }
   };
+
 
   render() {
     return (
-      // <View>
-      //   <ActivityIndicator />
-      //   <StatusBar barStyle="default" />
-      // </View>
       <View style={[styles.container, styles.horizontal]}>
         <Text style={{
-          fontSize:20,
-          fontWeight:'bold'
+          fontSize: 20,
+          fontWeight: 'bold'
         }}>HARAP TUNGGU...</Text>
         <ActivityIndicator size={50} color="#0000ff" />
       </View>
@@ -53,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
   }
 })
 

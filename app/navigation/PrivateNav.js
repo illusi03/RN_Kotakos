@@ -12,7 +12,7 @@ const PrivateNav = createBottomTabNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
-      tabBarLabel: 'Home',
+      tabBarLabel: 'Beranda',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="ios-home" color={tintColor} size={25} />
       )
@@ -22,7 +22,7 @@ const PrivateNav = createBottomTabNavigator({
     screen: ChatStack,
     navigationOptions: {
       header: null,
-      tabBarLabel: 'Chat',
+      tabBarLabel: 'Pesan',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="ios-chatboxes" color={tintColor} size={24} />
       )
@@ -31,7 +31,7 @@ const PrivateNav = createBottomTabNavigator({
   Wishlist: {
     screen: Wishlist,
     navigationOptions: {
-      tabBarLabel: 'Wishlist',
+      tabBarLabel: 'Daftar Penanda',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="ios-heart" color={tintColor} size={28} />
       )
@@ -40,7 +40,7 @@ const PrivateNav = createBottomTabNavigator({
   Profile: {
     screen: Profile,
     navigationOptions: {
-      tabBarLabel: 'Profile',
+      tabBarLabel: 'Profil',
       tabBarIcon: ({ tintColor }) => (
         <Icon name="ios-person" color={tintColor} size={24} />
       )
