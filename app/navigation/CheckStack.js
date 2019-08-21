@@ -19,18 +19,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 class CheckStack extends Component {
   state = {
-    isLogin: 'false',
     bagus: ''
   }
   constructor(props) {
     super(props);
-    this.isLogin
-    // alert('Tess')
     this._bootstrapAsync();
   }
   _bootstrapAsync = async () => {
     try {
       const fetchDataMentah = await AsyncStorage.getItem('userToken');
+      console.log(fetchDataMentah)
       if (fetchDataMentah != null) {
         this.props.navigation.navigate('PrivateStack')
       } else {
@@ -40,7 +38,6 @@ class CheckStack extends Component {
       alert(e)
     }
   };
-
 
   render() {
     return (

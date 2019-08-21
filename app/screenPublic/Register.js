@@ -13,11 +13,45 @@ import {
 import { Button } from 'react-native-paper'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios'
+import VarGlobal from '../environtment/VarGlobal'
 
 export default class ClassRegister extends Component {
+
+  state = {
+    username: '',
+    password: '',
+    name: '',
+    telp: '',
+    job: ''
+  }
+  _aksiRegis = () => {
+    this._aksiRegisAsync();
+  }
+  _aksiRegisAsync = async () => {
+    try {
+      //Fetch Data USERNAME dan PASSWORD API , LALU PENGECEKAN , JIKA MATCH BERI TOKEN
+      let tempUser = {
+        username: this.state.username,
+        password: this.state.password,
+        name: this.state.name,
+        telp: this.state.telp,
+        job: this.state.job
+      }
+      await axios.post(VarGlobal.host + "/user", tempUser)
+        .then((response) => {
+          this.props.navigation.navigate('PublicNav')
+        })
+        .catch((error) => {
+          alert(error)
+        });
+    }
+    catch (e) { }
+  }
+
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         {/* Header  */}
         <View style={[styles.cardSimpleContainer, {
           height: 55,
@@ -39,123 +73,151 @@ export default class ClassRegister extends Component {
           }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
-
-        <View style={{
-          backgroundColor: '#fff',
-          alignItems: 'center',
-          justifyContent: 'flex-start'
-        }}>
-          <Image source={require('../assets/illustrator/register.png')} style={{
-            width: 245,
-            height: 175,
-            resizeMode: 'stretch'
-          }}></Image>
-        </View>
-
-        <View style={{
-          flex: 1
-        }}>
-          {/* Form Regis */}
+        <ScrollView>
           <View style={{
-            justifyContent: 'center',
+            backgroundColor: '#fff',
             alignItems: 'center',
+            justifyContent: 'flex-start'
           }}>
+            <Image source={require('../assets/illustrator/register.png')} style={{
+              width: 245,
+              height: 175,
+              resizeMode: 'stretch'
+            }}></Image>
+          </View>
+
+          <View style={{
+            flex: 1
+          }}>
+            {/* Form Regis */}
             <View style={{
               justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: 250,
-              marginBottom: 10
+              alignItems: 'center',
             }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: '300',
-                color: '#000'
-              }}>Username</Text>
-              <TextInput style={{
-                borderBottomColor: '#000',
-                borderBottomWidth: 1,
-                backgroundColor: '#f8f8f8',
-                width: '100%'
-              }}
-                placeholder='Masukan Username Disini'
-              ></TextInput>
-            </View>
-            <View style={{
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: 250,
-              marginBottom: 10
-            }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: '300',
-                color: '#000'
-              }}>Password</Text>
-              <TextInput style={{
-                borderBottomColor: '#000',
-                borderBottomWidth: 1,
-                backgroundColor: '#f8f8f8',
-                width: '100%'
-              }}
-                placeholder='Masukan Password Disini'
-              ></TextInput>
-            </View>
-            <View style={{
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: 250,
-              marginBottom: 10
-            }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: '300',
-                color: '#000'
-              }}>Nama Lengkap</Text>
-              <TextInput style={{
-                borderBottomColor: '#000',
-                borderBottomWidth: 1,
-                backgroundColor: '#f8f8f8',
-                width: '100%'
-              }}
-                placeholder='Masukan Nama Lengkap Disini'
-              ></TextInput>
-            </View>
-            <View style={{
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              width: 250,
-              marginBottom: 10
-            }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: '300',
-                color: '#000'
-              }}>No HP</Text>
-              <TextInput style={{
-                borderBottomColor: '#000',
-                borderBottomWidth: 1,
-                backgroundColor: '#f8f8f8',
-                width: '100%'
-              }}
-                placeholder='Masukan No HP Disini'
-              ></TextInput>
-            </View>
-            <View style={{
-              flexDirection: 'row'
-            }}>
-              <Button mode='contained' style={{
-                backgroundColor: '#0476d9',
-                marginVertical: 20,
-                marginHorizontal: 20,
-                width: 200
-              }}
-                onPress={() => alert('Mengirim Data Nya')}
-              >
-                <Text>Register</Text>
-              </Button>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000'
+                }}>Username</Text>
+                <TextInput style={{
+                  borderBottomColor: '#000',
+                  borderBottomWidth: 1,
+                  backgroundColor: '#fff',
+                  width: '100%'
+                }}
+                  onChangeText={(username) => this.setState({ username })}
+                  placeholder='Masukan Username Disini'
+                ></TextInput>
+              </View>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000'
+                }}>Password</Text>
+                <TextInput style={{
+                  borderBottomColor: '#000',
+                  borderBottomWidth: 1,
+                  backgroundColor: '#fff',
+                  width: '100%'
+                }}
+                  keyboardType='visible-password'
+                  onChangeText={(password) => this.setState({ password })}
+                  placeholder='Masukan Password Disini'
+                ></TextInput>
+              </View>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000'
+                }}>Nama Lengkap</Text>
+                <TextInput style={{
+                  borderBottomColor: '#000',
+                  borderBottomWidth: 1,
+                  backgroundColor: '#fff',
+                  width: '100%'
+                }}
+                  onChangeText={(name) => this.setState({ name })}
+                  placeholder='Masukan Nama Lengkap Disini'
+                ></TextInput>
+              </View>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000'
+                }}>No HP</Text>
+                <TextInput style={{
+                  borderBottomColor: '#000',
+                  borderBottomWidth: 1,
+                  backgroundColor: '#fff',
+                  width: '100%'
+                }}
+                  keyboardType='numeric'
+                  onChangeText={(telp) => this.setState({ telp })}
+                  placeholder='Masukan No HP Disini'
+                ></TextInput>
+              </View>
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000'
+                }}>Pekerjaan</Text>
+                <TextInput style={{
+                  borderBottomColor: '#000',
+                  borderBottomWidth: 1,
+                  backgroundColor: '#fff',
+                  width: '100%'
+                }}
+                  onChangeText={(job) => this.setState({ job })}
+                  placeholder='Masukan Pekerjaan Disini'
+                ></TextInput>
+              </View>
+              <View style={{
+                flexDirection: 'row'
+              }}>
+                <Button mode='contained' style={{
+                  backgroundColor: '#0476d9',
+                  marginVertical: 20,
+                  marginHorizontal: 20,
+                  width: 200
+                }}
+                  onPress={this._aksiRegis}
+                >
+                  <Text>Register</Text>
+                </Button>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }

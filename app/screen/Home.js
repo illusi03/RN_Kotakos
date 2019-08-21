@@ -27,12 +27,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 class ClassHome extends Component {
-
-
   componentDidMount(){
     this._cekLogin();
   }
-
   _cekLogin = async () => {
     const fetchDataMentah = await AsyncStorage.getItem('userToken');
     if (fetchDataMentah) {
@@ -48,7 +45,6 @@ class ClassHome extends Component {
 
   state = {
     udahLogin : false,
-
     position: 1,
     interval: null,
     dataSource: [
@@ -125,7 +121,13 @@ class ClassHome extends Component {
               paddingBottom: 5
             }}>Mau Cari Kost Dimana ?</Text>
             <View style={{ position: 'relative' }}>
-              <Button onPress={() => this.props.navigation.navigate('ClassListKos')} style={{
+              <Button onPress={() => {
+                if(this.state.udahLogin){
+                  this.props.navigation.navigate('ClassListKos')
+                }else{
+                  this.props.navigation.navigate('ClassListKosPublic')
+                }
+              }} style={{
               // <Button onPress={() => this.props.navigation.navigate('ClassListKosPublic')} style={{
                 //Jika Blm login Change Navigate
                 backgroundColor: '#e8e8e8',

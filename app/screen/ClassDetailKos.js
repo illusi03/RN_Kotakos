@@ -24,22 +24,34 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 var SendIntentAndroid = require('react-native-send-intent');
- 
+
 
 
 class ClassDetailKos extends Component {
-  componentDidMount(){
+  convertToRupiah(angka) {
+    let rupiah = '';
+    let angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
+  // Rupiah to angka
+  convertToAngka(rupiah) {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+  }
+
+  componentDidMount() {
     this._cekLogin();
   }
   _cekLogin = async () => {
     const fetchDataMentah = await AsyncStorage.getItem('userToken');
     if (fetchDataMentah) {
       this.setState({
-        udahLogin:true
+        udahLogin: true
       })
-    }else{
+    } else {
       this.setState({
-        udahLogin:false
+        udahLogin: false
       })
     }
   }
@@ -48,11 +60,11 @@ class ClassDetailKos extends Component {
     super();
     this.state = {
       isFotoState: true,
-      udahLogin : false
+      udahLogin: false
     };
   }
 
-  aksiHubKos = ()=>{
+  aksiHubKos = () => {
     SendIntentAndroid.sendPhoneDial('085224242412', false);
   }
 
@@ -284,7 +296,7 @@ class ClassDetailKos extends Component {
                       fontWeight: 'bold'
                     }}>Deskripsi Kos</Text>
                     <Text style={{
-                       color:'#000'
+                      color: '#000'
                     }}>Cupidatat cupidatat ad fugiat qui sint occaecat. Proident eiusmod reprehenderit in aliqua adipisicing deserunt cupidatat. Duis magna id consectetur exercitation in nulla duis officia ullamco nostrud quis consequat consectetur elit. Esse dolore pariatur officia occaecat. Quis do officia consectetur cupidatat eiusmod velit fugiat proident voluptate adipisicing esse deserunt id.</Text>
                   </View>
 
@@ -332,9 +344,9 @@ class ClassDetailKos extends Component {
                       <Icon name='user-circle' size={40} color='#0476d9' />
                     </View>
                     <View style={{ flex: 6, paddingLeft: 2 }}>
-                      <Text style={{ fontSize: 15, color:'#000'}}>Pemilik Kos</Text>
-                      <Text style={{ fontSize: 15 , color:'#000'}}>Vera</Text>
-                      <Text style={{ fontSize: 18, fontWeight: 'bold' , color:'#000'}}>085224242412</Text>
+                      <Text style={{ fontSize: 15, color: '#000' }}>Pemilik Kos</Text>
+                      <Text style={{ fontSize: 15, color: '#000' }}>Vera</Text>
+                      <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>085224242412</Text>
                     </View>
                     {/* <TouchableOpacity style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
                       <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Minta Nomor</Text>
@@ -372,7 +384,7 @@ class ClassDetailKos extends Component {
                   fontWeight: 'bold',
                   fontSize: 17,
                   color: '#000'
-                }}>Rp. {item.price} / Bulan</Text>
+                }}>{this.convertToRupiah(item.price)} / Bulan</Text>
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#000'
@@ -409,13 +421,13 @@ class ClassDetailKos extends Component {
                 padding: 5,
                 borderColor: '#0476d9'
               }}
-                onPress={()=> {
-                    if(this.state.udahLogin){
-                      this.props.navigation.navigate('ClassDetailBooking')
-                    }else{
-                      this.props.navigation.navigate('ClassLogin')
-                    }
-                  }}
+                onPress={() => {
+                  if (this.state.udahLogin) {
+                    this.props.navigation.navigate('ClassDetailBooking')
+                  } else {
+                    this.props.navigation.navigate('ClassLogin')
+                  }
+                }}
               >
                 <Text style={{
                   fontWeight: 'bold',

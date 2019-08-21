@@ -20,28 +20,33 @@ import { FlatList } from "react-native-gesture-handler";
 import MapView, { Marker } from 'react-native-maps';
 import ActionSheet from 'react-native-actionsheet'
 
+import AsyncStorage from '@react-native-community/async-storage';
 
 class ClassListKos extends Component {
-
+  componentDidMount(){
+    this._cekLogin();
+  }
+  _cekLogin = async () => {
+    const fetchDataMentah = await AsyncStorage.getItem('userToken');
+    if (fetchDataMentah) {
+      this.setState({
+        udahLogin:true
+      })
+    }else{
+      this.setState({
+        udahLogin:false
+      })
+    }
+  }
   showActionSheet = () => {
     this.ActionSheet.show()
-  }
-
-  componentDidMount() {
-    axios.get('https://192.168.0.23:5000/api/v1/dorms')
-      .then(response => {
-        this.setState({
-          dataKos: 'tes'
-        })
-      })
-      .catch(error => { });
-    console.log(this.state.dataKos)
   }
 
   constructor() {
     super();
     this.state = {
       isListKos: false,
+      udahLogin:false,
       judul: 'List Data [MAP]',
       noPage: 0,
       dataItem: [
@@ -181,9 +186,15 @@ class ClassListKos extends Component {
 
   render() {
     let paramNavigateDetailKos = (itemNya) => {
-      this.props.navigation.navigate('ClassDetailKos', {
-        itemNya
-      })
+      if(this.state.udahLogin){
+        this.props.navigation.navigate('ClassDetailKos', {
+          itemNya
+        })
+      }else{
+        this.props.navigation.navigate('ClassDetailKosPublic', {
+          itemNya
+        })
+      }
     };
     return (
       <View style={{ flex: 1 }}>
@@ -228,9 +239,10 @@ class ClassListKos extends Component {
                 <ActionSheet
                   ref={o => this.ActionSheet = o}
                   title={'Urutkan Berdasarkan'}
-                  options={['Herga Termurah', 'Harga Termahal','Jenis Kos']}
+                  options={['Herga Termurah', 'Harga Termahal','Kos Putri','Kos Putra','Kos Campuran','Batal']}
+                  cancelButtonIndex={5}
                   onPress={(index) => { 
-                    alert(index)
+                    
                   }}
                 />
                 <TouchableOpacity onPress={this.showActionSheet} >

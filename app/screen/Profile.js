@@ -19,10 +19,9 @@ class Profile extends React.Component {
   _logoutAsync = async () => {
     try {
       await AsyncStorage.clear()
+      this.props.navigation.navigate('PublicStack')
     } catch(e) {}
-    this.props.navigation.navigate('PublicStack')
   };
-
 
   render() {
     return (
