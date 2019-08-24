@@ -15,13 +15,24 @@ import {
 // paramNavigate = Navigate ke CLassDetailKos
 // item = list ItemNya
 class CompListKos extends Component {
+  convertToRupiah(angka) {
+    let rupiah = '';
+    let angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
+  // Rupiah to angka
+  convertToAngka(rupiah) {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+  }
 
   render() {
     return (
       <View style={{ padding: 15, paddingBottom: 20 }}>
         <TouchableOpacity onPress={this.props.paramNavigate}>
           <View style={{ position: 'relative', paddingBottom: 10 }}>
-            <Image source={this.props.dataItem.photo}
+            <Image source={require('../assets/dummy2.jpg')}
               style={{
                 height: 125,
                 width: '100%',
@@ -44,7 +55,9 @@ class CompListKos extends Component {
             <Text>{this.props.dataItem.city}</Text>
           </View>
           <View style={{ flexDirection: 'row', paddingBottom: 10 }}>
-            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>Rp. {this.props.dataItem.price} / Bulan</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>
+            {(this.props.dataItem.price != null) ? this.convertToRupiah(this.props.dataItem.price): false
+            } / Bulan</Text>
             <Text style={{ color: 'grey' }}> - </Text>
             <Text style={{ color: '#000' }}>
               {this.props.dataItem.isPromo ? 'Ada Promo' : 'Tidak ada Promo'}

@@ -10,6 +10,8 @@ import {
 import { Button } from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage';
 
+import jwt from "react-native-pure-jwt";
+
 // import PrivateNav from '../navigation/PrivateNav';
 // import ClassHome from '../screen/Home';
 // import ClassListKos from '../screen/ClassListKos';
@@ -27,8 +29,12 @@ class CheckStack extends Component {
   }
   _bootstrapAsync = async () => {
     try {
+      //Cek Token Pas Awal
       const fetchDataMentah = await AsyncStorage.getItem('userToken');
-      console.log(fetchDataMentah)
+      const fetchDataUserJSON = await AsyncStorage.getItem('userObj');
+      const userObj = JSON.parse(fetchDataUserJSON);
+      console.log(`userToken Nya : ${fetchDataMentah}`)
+      console.log(`userObj Nya : ${userObj}`)
       if (fetchDataMentah != null) {
         this.props.navigation.navigate('PrivateStack')
       } else {

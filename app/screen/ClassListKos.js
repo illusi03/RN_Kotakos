@@ -20,23 +20,34 @@ import { FlatList } from "react-native-gesture-handler";
 import MapView, { Marker } from 'react-native-maps';
 import ActionSheet from 'react-native-actionsheet'
 
+import VarGlobal from '../environtment/VarGlobal'
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 class ClassListKos extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this._cekLogin();
+    this.__ambilDataMentah();
   }
   _cekLogin = async () => {
     const fetchDataMentah = await AsyncStorage.getItem('userToken');
     if (fetchDataMentah) {
-      this.setState({
-        udahLogin:true
+      await this.setState({
+        udahLogin: true,
+        tokenNya: fetchDataMentah
       })
-    }else{
-      this.setState({
-        udahLogin:false
+    } else {
+      await this.setState({
+        udahLogin: false
       })
     }
+  }
+  __ambilDataMentah = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    let responNya = await axios.get(VarGlobal.host+'/dorms')
+    await this.setState({
+      dataItem:responNya.data
+    })
   }
   showActionSheet = () => {
     this.ActionSheet.show()
@@ -46,33 +57,35 @@ class ClassListKos extends Component {
     super();
     this.state = {
       isListKos: false,
-      udahLogin:false,
+      udahLogin: false,
+      tokenNya: '',
       judul: 'List Data [MAP]',
       noPage: 0,
-      dataItem: [
-        {
-          id: '1',
-          name: 'Kosan Mamiroom Isma TegalRejo SATUUU',
-          type: 'Putri',
-          photo: require('../assets/dummy2.jpg'),
-          room: 2,
-          size: '5 x 6 m',
-          price: 125000,
-          city: 'Yogyakarta',
-          isPromo: false
-        },
-        {
-          id: '2',
-          name: 'Kosan Mamiroom Isma TegalRejo DUAASS',
-          type: 'Campur',
-          photo: require('../assets/dummy3.jpg'),
-          room: 5,
-          size: '2 x 2 m',
-          price: 500000,
-          city: 'Bandung',
-          isPromo: true
-        },
-      ],
+      dataItem : '',
+      // dataItem: [
+      //   {
+      //     id: '1',
+      //     name: 'Kosan Mamiroom Isma TegalRejo SATUUU',
+      //     type: 'Putri',
+      //     photo: require('../assets/dummy2.jpg'),
+      //     room: 2,
+      //     size: '5 x 6 m',
+      //     price: 125000,
+      //     city: 'Yogyakarta',
+      //     isPromo: false
+      //   },
+      //   {
+      //     id: '2',
+      //     name: 'Kosan Mamiroom Isma TegalRejo DUAASS',
+      //     type: 'Campur',
+      //     photo: require('../assets/dummy3.jpg'),
+      //     room: 5,
+      //     size: '2 x 2 m',
+      //     price: 500000,
+      //     city: 'Bandung',
+      //     isPromo: true
+      //   },
+      // ],
       isModalVisible: false
     };
   }
@@ -94,6 +107,7 @@ class ClassListKos extends Component {
           alignItems: 'center',
           //AlignItem Untuk center HORIZONTAL
         }]}>
+          {console.log(this.state.dataItem)}
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}
           >
             <Icon name="arrow-left" size={25} color="#fff" />
@@ -186,11 +200,11 @@ class ClassListKos extends Component {
 
   render() {
     let paramNavigateDetailKos = (itemNya) => {
-      if(this.state.udahLogin){
+      if (this.state.udahLogin) {
         this.props.navigation.navigate('ClassDetailKos', {
           itemNya
         })
-      }else{
+      } else {
         this.props.navigation.navigate('ClassDetailKosPublic', {
           itemNya
         })
@@ -213,7 +227,7 @@ class ClassListKos extends Component {
 
               <FlatList
                 data={this.state.dataItem}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <CompListKost paramNavigate={() => paramNavigateDetailKos(item)} dataItem={item} />
                 )}
@@ -239,10 +253,10 @@ class ClassListKos extends Component {
                 <ActionSheet
                   ref={o => this.ActionSheet = o}
                   title={'Urutkan Berdasarkan'}
-                  options={['Herga Termurah', 'Harga Termahal','Kos Putri','Kos Putra','Kos Campuran','Batal']}
+                  options={['Herga Termurah', 'Harga Termahal', 'Kos Putri', 'Kos Putra', 'Kos Campuran', 'Batal']}
                   cancelButtonIndex={5}
-                  onPress={(index) => { 
-                    
+                  onPress={(index) => {
+
                   }}
                 />
                 <TouchableOpacity onPress={this.showActionSheet} >

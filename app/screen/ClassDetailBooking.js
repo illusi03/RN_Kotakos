@@ -7,9 +7,20 @@ import { Checkbox } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from "react-native-modal-datetime-picker";
 
-
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class ClassDetailBooking extends Component {
+  convertToRupiah(angka) {
+    let rupiah = '';
+    let angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
+  // Rupiah to angka
+  convertToAngka(rupiah) {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+  }
 
   constructor(props, context) {
     super(props, context);
@@ -18,7 +29,8 @@ export default class ClassDetailBooking extends Component {
   state = {
     isDateTimePickerVisible: false,
     durasiKos: '',
-    isCheckedAgree: false
+    isCheckedAgree: false,
+    userObj : ''
   }
   showDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: true });
@@ -27,7 +39,7 @@ export default class ClassDetailBooking extends Component {
     this.setState({ isDateTimePickerVisible: false });
   };
   handleDatePicked = date => {
-    console.log("A date has been picked: ", date);
+    // console.log("A date has been picked: ", date);
     this.hideDateTimePicker();
   };
 
@@ -36,9 +48,23 @@ export default class ClassDetailBooking extends Component {
     this.setState({ durasiKos })
   }
 
+  _ambilDataAsync = async () => {
+    const fetchDataUserJSON = await AsyncStorage.getItem('userObj');
+    const userObj = JSON.parse(fetchDataUserJSON);
+    await this.setState({
+      userObj
+    })
+    console.log(this.state.userObj)
+  }
+
+
+  componentDidMount(){
+    this._ambilDataAsync();
+  }
 
   render() {
     const { isCheckedAgree } = this.state;
+    const item = this.props.navigation.getParam('itemNya');
     return (
       <View style={{
         flex: 1,
@@ -121,7 +147,7 @@ export default class ClassDetailBooking extends Component {
                     borderBottomWidth: 1,
                     borderColor: '#000',
                     marginRight: 15,
-                    paddingBottom:10
+                    paddingBottom: 10
                   }}>
                     18 April 2019
                   </Text>
@@ -136,14 +162,6 @@ export default class ClassDetailBooking extends Component {
             }}>
               <View style={{ flexDirection: 'column', marginRight: 20 }}>
                 <Text style={{ color: '#000', paddingBottom: 0 }}>Durasi Kos (Bulan)</Text>
-                {/* <RNPickerSelect
-                  onValueChange={(value) => console.log(value)}
-                  items={[
-                    { label: '1 Bulan', value: '1' },
-                    { label: '2 Bulan', value: '2' },
-                    { label: '3 Bulan', value: '3' },
-                  ]}
-                /> */}
                 <TextInput style={{
                   color: '#000',
                   fontSize: 18,
@@ -152,7 +170,7 @@ export default class ClassDetailBooking extends Component {
                   borderColor: '#000',
                   marginRight: 15
                 }} keyboardType='numeric'>
-                  </TextInput>
+                </TextInput>
               </View>
             </View>
           </View>
@@ -185,7 +203,9 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '500',
                 color: '#000'
               }}
-              >Kosan Mamikos Isma Tegalrejo Yogyakarta</Text>
+              >
+                {item.name} ( {item.type} )
+              </Text>
               {/* Bungkusan Icon konten isi 2 */}
               <View style={{
                 flex: 1,
@@ -193,22 +213,19 @@ export default class ClassDetailBooking extends Component {
                 alignItems: 'center',
                 flexDirection: 'row'
               }}>
-                <Icon name='bed' size={18} color='#0476d9'></Icon>
-                <Icon name='toilet' size={18} color='#0476d9'
-                  style={{ paddingLeft: 15 }}></Icon>
-                <Icon name='wifi' size={18} color='#0476d9'
-                  style={{ paddingLeft: 15 }}></Icon>
-                <Icon name='search' size={18} color='#0476d9'
-                  style={{ paddingLeft: 15 }}></Icon>
-                <Icon name='key' size={18} color='#0476d9'
-                  style={{ paddingLeft: 15 }}></Icon>
+                {item.bed ? <Icon name='bed' size={18} color='#0476d9'></Icon> : false}
+                {item.wifi ? <Icon name='wifi' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
+                {item.wc ? <Icon name='toilet' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
+                {item.key ? <Icon name='key' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
               </View>
               <Text style={{
                 fontSize: 17,
                 fontWeight: '500',
                 color: '#000'
               }}
-              >Rp. 1.250.000 / Bulan</Text>
+              >
+                {(item.price != null) ? this.convertToRupiah(item.price) : false} / Bulan
+              </Text>
             </View>
           </View>
 
@@ -238,7 +255,7 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '500',
                 color: '#000'
               }}
-              >Data Penghuni</Text>
+              >Data Pemesan</Text>
 
             </View>
             <View style={{
@@ -256,7 +273,9 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '200',
                 color: '#000'
               }}
-              >Bambang M Azhari</Text>
+              >
+                {this.state.userObj.name}
+              </Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -273,7 +292,9 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '200',
                 color: '#000'
               }}
-              >Laki Laki</Text>
+              >
+                {this.state.userObj.gender}
+              </Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -290,7 +311,9 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '200',
                 color: '#000'
               }}
-              >0852-4123-1244</Text>
+              >
+                {this.state.userObj.telp}
+              </Text>
             </View>
             <View style={{
               flexDirection: 'row',
@@ -308,7 +331,7 @@ export default class ClassDetailBooking extends Component {
                 fontWeight: '200',
                 color: '#000'
               }}
-              >Wiraswasta</Text>
+              >{this.state.userObj.job}</Text>
             </View>
 
             {/* Separator  */}

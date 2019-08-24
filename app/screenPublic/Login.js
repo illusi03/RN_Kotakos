@@ -16,6 +16,8 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import jwt from "react-native-pure-jwt";
+
 
 import VarGlobal from '../environtment/VarGlobal'
 
@@ -27,7 +29,8 @@ class ClassLogin extends Component {
       textUsername: '',
       textPass: '',
       userToken: '',
-      tempUserFetch: ''
+      tempUserFetch: '',
+      tempIDNyaBaru:''
     }
   }
   seleksiLogin = async () => {
@@ -37,20 +40,26 @@ class ClassLogin extends Component {
         username: this.state.textUsername,
         password: this.state.textPass
       }
-      await axios.post(VarGlobal.host+"/login",tempUser)
-        .then((response) => {
-          if (typeof response.data.token !== 'undefined') {
-            AsyncStorage.setItem('userToken', response.data.token);
-            this.props.navigation.navigate('PrivateStack')
-          } else {
-            alert('Gagal Login')
+      let resUser = await axios.post(VarGlobal.host + "/login", tempUser)
+      console.log(`REF USER: ${resUser}`)
+      if (resUser) {
+        await AsyncStorage.setItem('userToken', resUser.data.token);
+        const objJwt = await jwt.decode(
+          resUser.data.token, // the token
+          'reactnative', // the secret
+          {
+            skipValidation: true // to skip signature and exp verification
           }
-        })
-        .catch((error) => {
-          alert(error)
-        });
+        );
+        await AsyncStorage.setItem('userObj',JSON.stringify(objJwt.payload.userObj));
+        this.props.navigation.navigate('PrivateStack')
+      }else{
+        alert('Gagal Login')
+      }
     }
-    catch (e) { }
+    catch (e) {
+      console.log(e)
+    }
   }
 
   render() {
@@ -121,7 +130,7 @@ class ClassLogin extends Component {
                 width: '100%'
               }}
                 placeholder='Masukan Username Disini'
-                onChangeText={(textUsername)=> this.setState({textUsername})}
+                onChangeText={(textUsername) => this.setState({ textUsername })}
               ></TextInput>
             </View>
             <View style={{
@@ -141,7 +150,7 @@ class ClassLogin extends Component {
                 width: '100%'
               }}
                 placeholder='Masukan Password Disini'
-                onChangeText={(textPass)=> this.setState({textPass})}
+                onChangeText={(textPass) => this.setState({ textPass })}
               ></TextInput>
             </View>
             <View style={{

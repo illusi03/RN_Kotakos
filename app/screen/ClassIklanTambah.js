@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, TextInput, Image, Picker } from 'react-native';
 import { Appbar, Button, Text } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -10,18 +10,69 @@ import CompTextInput from '../component/CompTextInputIklan';
 
 import MarkerNya from '../assets/icon/icon_marker.png'
 import MapView, { Marker } from 'react-native-maps';
+import VarGlobal from '../environtment/VarGlobal'
+
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
 class ClassIklanTambah extends Component {
+
   state = {
     region: {
-      latitude: 37.78825,
-      longitude: -122.4324,
+      latitude: -7.325043,
+      longitude: 108.221384,
       latitudeDelta: 0.025,
       longitudeDelta: 0.025,
-    }
+    },
+    tmpname: '',
+    tmplat: '',
+    tmplong: '',
+    tmproom: '',
+    tmpprice: '',
+    tmptype: '',
+    tmpdescription: '',
+    tmpwc: true,
+    tmpwifi: true,
+    tmpkeyRoom: true,
+    tmpbed: true,
+    tmpelectric: true,
+    tmpsize: '5x2m',
+    tmpuserId: '',
+    tmpProv: '',
+    tmpProvName: '',
+    tmpKab: '',
+    tmpKabName: '',
+    tmpKec: '',
+    tmpKecName: '',
+    tmpKel: '',
+    tmpKelName: '',
+    dataProv: [],
+    dataKab: [],
+    dataKec: '',
+    dataKel: '',
+    dataItem: {
+      name: '',
+      lat: '',
+      long: '',
+      room: '',
+      price: '',
+      type: '',
+      description: '',
+      wc: true,
+      wifi: true,
+      keyRoom: true,
+      bed: true,
+      electric: true,
+      size: '3x5m',
+      userId: ''
+    },
+    provId: '',
+    kabId: '',
+    kecId: '',
+    kelId: ''
   }
   static navigationOptions = {
-    title: 'Kosyu',
+    title: 'KotaKos',
     header: null,
     headerStyle: {
       backgroundColor: '#00BFFF',
@@ -32,11 +83,71 @@ class ClassIklanTambah extends Component {
     }
   };
 
-  onRegionChange = (region)=> {
-    this.setState({ region });
+
+  simpanData = async () => {
+    try {
+      const userTokenTemp = await AsyncStorage.getItem('userToken');
+      const userStrTemp = await AsyncStorage.getItem('userObj');
+      const objUser = await JSON.parse(userStrTemp);
+      await this.setState({
+        dataItem: {
+          name: this.state.tmpname,
+          lat: this.state.region.latitude.toString(),
+          long: this.state.region.longitude.toString(),
+          room: parseInt(this.state.tmproom),
+          price: parseInt(this.state.tmpprice),
+          type: this.state.tmptype,
+          description: this.state.tmpdescription,
+          wc: this.state.tmpwc,
+          wifi: this.state.tmpwifi,
+          keyRoom: this.state.tmpkeyRoom,
+          bed: this.state.tmpbed,
+          electric: this.state.tmpelectric,
+          size: this.state.tmpsize,
+          userId: objUser.id
+        }
+      })
+      console.log(this.state.dataItem)
+      const configBarier = {
+        headers: { Authorization: "bearer " + userTokenTemp }
+      };
+      await axios.post(`${VarGlobal.host}/dorm`, this.state.dataItem, configBarier)
+      alert('Berhasil ditambahkan')
+    } catch (e) {
+      console.log(`ERROR DI Simpan Data Iklan Tambah : ${e}`)
+    }
   }
 
+  _getWilayahProvince = async () => {
+    const responseTemporer = await axios.get("http://dev.farizdotid.com/api/daerahindonesia/provinsi");
+    await this.setState({
+      dataProv: responseTemporer.data.semuaprovinsi
+    })
+  }
+  _getWilayahKab = async () => {
+    const responseTemporer = await axios.get(`http://dev.farizdotid.com/api/daerahindonesia/provinsi/${this.state.tmpProv}/kabupaten`);
+    await this.setState({
+      dataKab: responseTemporer.data.kabupatens
+    })
+  }
+  _getWilayahKec = async () => {
+    await axios.get(`http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/${this.state.tmpKab}/kecamatan`);
+  }
+  _getWilayahKel = async () => {
+    await axios.get(`http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/${this.state.tmpKec}/desa`);
+  }
 
+  _aksiTambah = () => {
+    this.simpanData();
+  }
+
+  componentDidMount() {
+    this._getWilayahProvince();
+  }
+
+  onRegionChange = (region) => {
+    this.setState({ region });
+  }
   render() {
     return (
       <View>
@@ -65,7 +176,6 @@ class ClassIklanTambah extends Component {
           <Icon name='cube' size={30} color='#fff' />
         </View>
 
-
         <View style={{ padding: 15 }}>
           <ScrollView>
             <View style={{
@@ -84,8 +194,100 @@ class ClassIklanTambah extends Component {
               borderWidth: 0.2,
               marginBottom: 18
             }} />
-            <CompTextInput textLabel='Nama Kos' placeholder='Masukan Nama Kos Disini' />
-            <CompTextInput textLabel='Pemilik Kos' placeholder='Masukan Nama Pemilik Kos' />
+
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Nama Kos </Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <TextInput style={{
+                borderColor: '#303f9f',
+                fontSize: 20,
+                color: '#000'
+              }}
+                onChangeText={(a) => this.setState({ tmpname: a })}
+                placeholder='Masukan Nama Kos'
+                underlineColorAndroid='#303f9f'
+              />
+            </View>
+
+            {/* 
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Provinsi</Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <Picker
+                selectedValue={this.state.tmpProv}
+                style={{ flex: 1 }}
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({
+                    tmpProv:itemValue
+                  })
+                  if(this.state.tmpProv.length>0){
+                    this._getWilayahKab().then().catch();
+                  }
+                }} styles={{ fontSize: 18 }}>
+                  {this.state.dataProv.map( (item,index) => {
+                    return(
+                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
+                    )
+                  })}
+              </Picker>
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Kab. Kota</Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <Picker
+                selectedValue={this.state.tmpKab}
+                style={{ flex: 1 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({
+                    tmpKab:itemValue
+                  })
+                } styles={{ fontSize: 18 }}>
+                  {this.state.dataKab.map( (item,index) => {
+                    return(
+                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
+                    )
+                  })}
+              </Picker>
+            </View> */}
+
+
+
             <Text style={{
               fontSize: 15,
               fontWeight: '200',
@@ -96,20 +298,18 @@ class ClassIklanTambah extends Component {
             <View style={{
               height: 250
             }}>
-              {/* <CompMaps /> */}
-
               <MapView style={{
                 width: '100%',
                 height: '100%'
               }}
                 initialRegion={this.state.region}
                 onRegionChangeComplete={this.onRegionChange}>
-                <View style={styles.markerFixed}>
-                  <Image style={styles.markerNya} source={MarkerNya} />
-                </View>
+                <Marker
+                  coordinate={this.state.region}
+                  title={"Kosan"}
+                  description={" - Marker kosan dari KotaKos - "}
+                />
               </MapView>
-
-
             </View>
             <View style={{
               flexDirection: 'row'
@@ -140,9 +340,9 @@ class ClassIklanTambah extends Component {
                     selectTextOnFocus={false}
                     placeholder='Latitude'
                     underlineColorAndroid='#303f9f'
+                    value={this.state.region.latitude.toString()}
                   />
                 </View>
-
               </View>
               <View style={{ flex: 1 }}>
                 <View style={{ marginBottom: 5 }}>
@@ -165,6 +365,7 @@ class ClassIklanTambah extends Component {
                     fontSize: 20,
                     color: '#000'
                   }}
+                    value={this.state.region.longitude.toString()}
                     editable={false}
                     selectTextOnFocus={false}
                     placeholder='Longitude'
@@ -173,11 +374,114 @@ class ClassIklanTambah extends Component {
                 </View>
               </View>
             </View>
-            <CompTextInput textLabel='No HP' placeholder='Masukan No HP / Telp ' />
-            <CompTextInput textLabel='Harga /Bulan' placeholder='Masukan Nilai Numerik' />
+
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Jumlah Kamar</Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <TextInput style={{
+                borderColor: '#303f9f',
+                fontSize: 20,
+                color: '#000'
+              }}
+                onChangeText={(a) => this.setState({ tmproom: a })}
+                keyboardType='numeric'
+                placeholder='Masukan Jumlah Kamar'
+                underlineColorAndroid='#303f9f'
+              />
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Harga / Bulan </Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <TextInput style={{
+                borderColor: '#303f9f',
+                fontSize: 20,
+                color: '#000'
+              }}
+                onChangeText={(a) => this.setState({ tmpprice: a })}
+                keyboardType='numeric'
+                placeholder='Masukan Harga per Bulan'
+                underlineColorAndroid='#303f9f'
+              />
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Jenis Kosan </Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <Picker
+                selectedValue={this.state.tmptype}
+                style={{ flex: 1 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ tmptype: itemValue })
+                } styles={{ fontSize: 18 }}>
+                <Picker.Item label="Putra" value="Putra" />
+                <Picker.Item label="Putri" value="Putri" />
+              </Picker>
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Masukan Deskripsi </Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <TextInput style={{
+                borderColor: '#303f9f',
+                fontSize: 20,
+                color: '#000'
+              }}
+                onChangeText={(a) => this.setState({ tmpdescription: a })}
+                placeholder='Masukan Deskripsi'
+                underlineColorAndroid='#303f9f'
+                multiline={true}
+                numberOfLines={2}
+              />
+            </View>
             <Button mode='contained' style={{
               backgroundColor: '#0476d9'
-            }} onPress={() => alert('Submit Data Ya')}>
+            }} onPress={this._aksiTambah}>
               <Text style={{
                 color: '#fff',
                 fontSize: 15,

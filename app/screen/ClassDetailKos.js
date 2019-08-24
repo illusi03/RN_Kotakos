@@ -55,19 +55,17 @@ class ClassDetailKos extends Component {
       })
     }
   }
-
   constructor() {
     super();
     this.state = {
       isFotoState: true,
-      udahLogin: false
+      udahLogin: false,
+      dateUpdateBaru: ''
     };
   }
-
   aksiHubKos = () => {
     SendIntentAndroid.sendPhoneDial('085224242412', false);
   }
-
   static navigationOptions = {
     title: 'Detail Kos',
     headerStyle: {
@@ -106,7 +104,9 @@ class ClassDetailKos extends Component {
       return (
         <View>
           <View style={{ position: 'relative', paddingBottom: 0 }}>
-            <Image source={this.props.navigation.getParam('itemNya').photo} style={{ height: 200, width: '100%' }} />
+            <Image source={require('../assets/dummy2.jpg')}
+              // {this.props.navigation.getParam('itemNya').photo}
+              style={{ height: 200, width: '100%' }} />
             {/* <TouchableOpacity onPress={() => alert('Tes')} style={{ position: 'absolute', right: 10, top: 5 }}>
               <Icon name="star" size={35} color='#ffffff' />
             </TouchableOpacity> */}
@@ -177,9 +177,21 @@ class ClassDetailKos extends Component {
       });
     }
   }
-
+  _renderFeature = (namaIcon, namaFasilitas) => {
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={namaIcon} size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
+        <Text style={{ textAlign: 'center', fontSize: 12, color: 'black' }}>{namaFasilitas}</Text>
+      </View>
+    )
+  }
   render() {
     const item = this.props.navigation.getParam('itemNya');
+    // let dateFormatted = new Date(parseInt(item.createdAt.substr(6)))
+    // let month = dateFormatted.getMonth() + 1;
+    // let day = dateFormatted.getDate();
+    // let year = dateFormatted.getFullYear();
+    // let dateNya = day + "/" + month + "/" + year;
     return (
       <View style={{ flex: 1 }}>
         {/* Header Detail Kost */}
@@ -254,7 +266,8 @@ class ClassDetailKos extends Component {
                   </View>
                   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
                     <Text style={{ fontSize: 15, color: 'black' }}>
-                      12 Agustus 2019 - 14.00
+                      {/* {dateFormatted} */}
+                      {item.updatedAt}
                     </Text>
                   </View>
                   {/* Sparator */}
@@ -297,7 +310,9 @@ class ClassDetailKos extends Component {
                     }}>Deskripsi Kos</Text>
                     <Text style={{
                       color: '#000'
-                    }}>Cupidatat cupidatat ad fugiat qui sint occaecat. Proident eiusmod reprehenderit in aliqua adipisicing deserunt cupidatat. Duis magna id consectetur exercitation in nulla duis officia ullamco nostrud quis consequat consectetur elit. Esse dolore pariatur officia occaecat. Quis do officia consectetur cupidatat eiusmod velit fugiat proident voluptate adipisicing esse deserunt id.</Text>
+                    }}>
+                      {item.description}
+                    </Text>
                   </View>
 
                   {/* Sparator */}
@@ -307,11 +322,11 @@ class ClassDetailKos extends Component {
                   </View>
 
                   <View style={{ flexDirection: 'row', paddingVertical: 25, paddingHorizontal: 15, alignItems: 'center' }}>
-                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name="bed" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
-                      <Text style={{ textAlign: 'center', fontSize: 12, color: 'black' }}>Kasur</Text>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.bed ? this._renderFeature('bed', 'Kamar') : false}
+                    {item.wc ? this._renderFeature('toilet', 'WC Didalam') : false}
+                    {item.wifi ? this._renderFeature('wifi', 'Wifi') : false}
+                    {item.key ? this._renderFeature('key', 'Kunci 24Jam') : false}
+                    {/* <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                       <Icon name="toilet" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>WC Didalam</Text>
                     </View>
@@ -322,7 +337,7 @@ class ClassDetailKos extends Component {
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                       <Icon name="key" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>Key 24 Jam</Text>
-                    </View>
+                    </View> */}
                   </View>
 
                   {/* Sparator */}
@@ -344,9 +359,15 @@ class ClassDetailKos extends Component {
                       <Icon name='user-circle' size={40} color='#0476d9' />
                     </View>
                     <View style={{ flex: 6, paddingLeft: 2 }}>
-                      <Text style={{ fontSize: 15, color: '#000' }}>Pemilik Kos</Text>
-                      <Text style={{ fontSize: 15, color: '#000' }}>Vera</Text>
-                      <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>085224242412</Text>
+                      <Text style={{ fontSize: 15, color: '#000' }}>
+                        Pemilik Kost
+                      </Text>
+                      <Text style={{ fontSize: 15, color: '#000' }}>
+                        {item.user.name}
+                      </Text>
+                      <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>
+                        {item.user.telp}
+                      </Text>
                     </View>
                     {/* <TouchableOpacity style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
                       <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Minta Nomor</Text>
@@ -384,7 +405,7 @@ class ClassDetailKos extends Component {
                   fontWeight: 'bold',
                   fontSize: 17,
                   color: '#000'
-                }}>{this.convertToRupiah(item.price)} / Bulan</Text>
+                }}>{(item.price != null) ? this.convertToRupiah(item.price) : false} / Bulan</Text>
                 <Text style={{
                   fontWeight: 'bold',
                   color: '#000'
@@ -423,7 +444,9 @@ class ClassDetailKos extends Component {
               }}
                 onPress={() => {
                   if (this.state.udahLogin) {
-                    this.props.navigation.navigate('ClassDetailBooking')
+                    this.props.navigation.navigate('ClassDetailBooking',{
+                      itemNya : item
+                    })
                   } else {
                     this.props.navigation.navigate('ClassLogin')
                   }
