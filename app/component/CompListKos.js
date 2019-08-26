@@ -32,7 +32,8 @@ class CompListKos extends Component {
       <View style={{ padding: 15, paddingBottom: 20 }}>
         <TouchableOpacity onPress={this.props.paramNavigate}>
           <View style={{ position: 'relative', paddingBottom: 10 }}>
-            <Image source={require('../assets/dummy2.jpg')}
+            <Image 
+            source={(this.props.dataItem.photo != null) ? {uri:`http://${this.props.dataItem.photo}`} : require('../assets/dummy.jpg')}
               style={{
                 height: 125,
                 width: '100%',

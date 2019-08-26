@@ -107,7 +107,6 @@ class ClassListKos extends Component {
           alignItems: 'center',
           //AlignItem Untuk center HORIZONTAL
         }]}>
-          {console.log(this.state.dataItem)}
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}
           >
             <Icon name="arrow-left" size={25} color="#fff" />

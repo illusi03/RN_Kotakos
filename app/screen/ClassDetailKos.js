@@ -101,10 +101,11 @@ class ClassDetailKos extends Component {
   };
   _compPetaView(isFotoState) {
     if (isFotoState) {
+      const item = this.props.navigation.getParam('itemNya');
       return (
         <View>
           <View style={{ position: 'relative', paddingBottom: 0 }}>
-            <Image source={require('../assets/dummy2.jpg')}
+            <Image source={(item.photo != null) ? {uri:`http://${item.photo}`} : require('../assets/dummy.jpg')}
               // {this.props.navigation.getParam('itemNya').photo}
               style={{ height: 200, width: '100%' }} />
             {/* <TouchableOpacity onPress={() => alert('Tes')} style={{ position: 'absolute', right: 10, top: 5 }}>
@@ -318,11 +319,11 @@ class ClassDetailKos extends Component {
                   {/* Sparator */}
                   <View style={{ borderColor: 'black', borderWidth: 0.2 }} />
                   <View style={{ flexDirection: 'row', paddingVertical: 5, justifyContent: 'flex-start' }}>
-                    <Text style={{ fontSize: 18, color: 'black' }}>Fasilitas kost dan kamar</Text>
+                    <Text style={{ fontSize: 18, color: 'black' }}>Fasilitas kost </Text>
                   </View>
 
                   <View style={{ flexDirection: 'row', paddingVertical: 25, paddingHorizontal: 15, alignItems: 'center' }}>
-                    {item.bed ? this._renderFeature('bed', 'Kamar') : false}
+                    {item.bed ? this._renderFeature('bed', 'Kasur') : false}
                     {item.wc ? this._renderFeature('toilet', 'WC Didalam') : false}
                     {item.wifi ? this._renderFeature('wifi', 'Wifi') : false}
                     {item.key ? this._renderFeature('key', 'Kunci 24Jam') : false}

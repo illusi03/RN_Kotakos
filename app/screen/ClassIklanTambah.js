@@ -14,6 +14,8 @@ import VarGlobal from '../environtment/VarGlobal'
 
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import Geocoder from 'react-native-geocoding';
+
 
 class ClassIklanTambah extends Component {
 
@@ -83,7 +85,6 @@ class ClassIklanTambah extends Component {
     }
   };
 
-
   simpanData = async () => {
     try {
       const userTokenTemp = await AsyncStorage.getItem('userToken');
@@ -117,7 +118,6 @@ class ClassIklanTambah extends Component {
       console.log(`ERROR DI Simpan Data Iklan Tambah : ${e}`)
     }
   }
-
   _getWilayahProvince = async () => {
     const responseTemporer = await axios.get("http://dev.farizdotid.com/api/daerahindonesia/provinsi");
     await this.setState({
@@ -136,17 +136,28 @@ class ClassIklanTambah extends Component {
   _getWilayahKel = async () => {
     await axios.get(`http://dev.farizdotid.com/api/daerahindonesia/provinsi/kabupaten/kecamatan/${this.state.tmpKec}/desa`);
   }
-
   _aksiTambah = () => {
     this.simpanData();
   }
-
   componentDidMount() {
     this._getWilayahProvince();
   }
-
   onRegionChange = (region) => {
     this.setState({ region });
+  }
+  _getDataMap = async () => {
+    await Geocoder.init("AIzaSyCkjvOAUH_J98nKBS5GIM774BzChoUCadA");
+    Geocoder.from(this.state.region.latitude, this.state.region.latitude)
+      .then(json => {
+        var addressComponent = json;
+        // console.log(addressComponent);
+        console.log(addressComponent)
+        alert(addressComponent);
+      })
+      .catch(error => console.warn(error));
+  }
+  ambilDataMapName = () => {
+    this._getDataMap();
   }
   render() {
     return (
@@ -311,6 +322,7 @@ class ClassIklanTambah extends Component {
                 />
               </MapView>
             </View>
+
             <View style={{
               flexDirection: 'row'
             }}>
@@ -333,7 +345,7 @@ class ClassIklanTambah extends Component {
                   </View>
                   <TextInput style={{
                     borderColor: '#303f9f',
-                    fontSize: 20,
+                    fontSize: 15,
                     color: '#000'
                   }}
                     editable={false}
@@ -362,7 +374,7 @@ class ClassIklanTambah extends Component {
                   </View>
                   <TextInput style={{
                     borderColor: '#303f9f',
-                    fontSize: 20,
+                    fontSize: 15,
                     color: '#000'
                   }}
                     value={this.state.region.longitude.toString()}
