@@ -70,10 +70,10 @@ class ClassListKos extends Component {
   sortingAksi = (index) => {
     switch (index) {
       case 0:
-        this.props.dispatch(sortKos('price', 'desc'))
+        this.props.dispatch(sortKos('price', 'asc'))
         break;
       case 1:
-        this.props.dispatch(sortKos('price', 'asc'))
+        this.props.dispatch(sortKos('price', 'desc'))
         break;
       case 2:
         this.props.dispatch(sortKos('type', 'desc'))

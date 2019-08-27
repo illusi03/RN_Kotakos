@@ -9,7 +9,7 @@ export const getKost = () => {
 }
 export const sortKos = (sortBy,typeSort) => {
   return {
-    type: 'GET_USER_SORT',
+    type: 'GET_USERS_SORT',
     payload: axios.get(`${VarGlobal.host}/dorms/sort/${sortBy}/${typeSort}`)
   }
 }

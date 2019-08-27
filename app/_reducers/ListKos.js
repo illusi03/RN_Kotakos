@@ -29,7 +29,6 @@ const ListKos = (state = initialState, action) => {
     case 'GET_USERS_REJECTED':
       return {
         ...state,
-        dataItem: action.payload,
         isListKos: false,
         error: payload.message,
       }
@@ -42,18 +41,19 @@ const ListKos = (state = initialState, action) => {
     case 'GET_USERS_SORT_PENDING':
       return {
         ...state,
+        dataItem:null,
         isLoading: true
       }
     case 'GET_USERS_SORT_FULFILLED':
       return {
         ...state,
-        dataItem: null,
-        isLoading: false
+        dataItem: action.payload.data,
+        isLoading: false,
+        isListKos:true
       }
     case 'GET_USERS_SORT_REJECTED':
       return {
         ...state,
-        dataItem: action.payload,
         isListKos: false,
         error: payload.message,
       }

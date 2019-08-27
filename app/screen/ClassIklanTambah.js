@@ -19,7 +19,13 @@ import ImagePicker from 'react-native-image-picker';
 
 
 class ClassIklanTambah extends Component {
+
   state = {
+    sttPhoto: {
+      uri: '',
+      type: '',
+      name: '',
+    },
     region: {
       latitude: -7.325043,
       longitude: 108.221384,
@@ -91,6 +97,20 @@ class ClassIklanTambah extends Component {
       const userTokenTemp = await AsyncStorage.getItem('userToken');
       const userStrTemp = await AsyncStorage.getItem('userObj');
       const objUser = await JSON.parse(userStrTemp);
+
+      let data = new FormData();
+      // data.append({ uri: photo.uri, type: photo.type, name: photo.fileName });
+      data.append('name', this.state.tmpname);
+      data.append('lat', this.state.region.latitude.toString());
+      data.append('long', this.state.region.longitude.toString());
+      data.append('room', this.state.tmproom);
+      data.append('price', this.state.tmpprice);
+      data.append('type', this.state.tmptype);
+      data.append('photo', this.state.avatarSource);
+      data.append('userId', objUser.id);
+      console.log(data)
+
+
       await this.setState({
         dataItem: {
           name: this.state.tmpname,
@@ -110,12 +130,24 @@ class ClassIklanTambah extends Component {
           userId: objUser.id
         }
       })
-      console.log(this.state.dataItem)
+
+      // const response = await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //     'Authorization': `Bearer ${params.token}`
+      //   },
+      //   body: data
+      // })
+
+      /*
       const configBarier = {
         headers: { Authorization: "bearer " + userTokenTemp }
       };
       await axios.post(`${VarGlobal.host}/dorm`, this.state.dataItem, configBarier)
-      alert('Berhasil ditambahkan')
+      this.props.navigation.navigate('PrivateStack')
+      */
     } catch (e) {
       console.log(`ERROR DI Simpan Data Iklan Tambah : ${e}`)
     }
@@ -160,7 +192,6 @@ class ClassIklanTambah extends Component {
   ambilDataMapName = () => {
     this._getDataMap();
   }
-
   showPopupImage = () => {
     const options = {
       title: 'Pilih Photo',
@@ -170,7 +201,6 @@ class ClassIklanTambah extends Component {
         path: 'images',
       },
     };
-
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -179,15 +209,21 @@ class ClassIklanTambah extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = { uri: response.uri };
+        let tmpPhoto = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        };
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        const source = tmpPhoto;
         this.setState({
-          avatarSource: source,
+          avatarSource: source
         });
       }
     });
   }
+
 
   render() {
     return (
@@ -545,8 +581,8 @@ class ClassIklanTambah extends Component {
                   fontWeight: 'bold'
                 }}>Pilih Photo</Text>
               </Button>
-              <Image source={this.state.avatarSource ? this.state.avatarSource : {uri:'../assets/dummy.jpg'}} 
-              style={this.state.avatarSource ? {marginTop:10, width:'100%',height:350} : {marginTop:10}} />
+              <Image source={this.state.avatarSource ? this.state.avatarSource : { uri: '../assets/dummy.jpg' }}
+                style={this.state.avatarSource ? { marginTop: 10, width: '100%', height: 350 } : { marginTop: 10 }} />
             </View>
             <Button mode='contained' style={{
               backgroundColor: '#0476d9'
