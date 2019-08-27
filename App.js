@@ -10,6 +10,9 @@ import PublicStack from './app/navigation/PublicStack'
 import CheckStack from './app/navigation/CheckStack'
 import Home from "./app/screen/Home";
 
+import {Provider} from 'react-redux'
+import Store from './app/_redux/Store'
+
 
 const AppNavigator = createSwitchNavigator({
   PrivateStack: PrivateStack,
@@ -23,7 +26,9 @@ const AppContainer = createAppContainer(AppNavigator);
 class App extends Component {
   render() {
     return (
-      <AppContainer />
+      <Provider store={Store}>
+        <AppContainer />
+      </Provider>
     )
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TextInput, Avatar, Button, Paragraph, Appbar, Searchbar, IconButton } from 'react-native-paper';
+import { TextInput, Avatar, Button, Paragraph, Appbar, Searchbar, IconButton, ActivityIndicator } from 'react-native-paper';
 import {
   View,
   Text,
@@ -23,11 +23,25 @@ import ActionSheet from 'react-native-actionsheet'
 import VarGlobal from '../environtment/VarGlobal'
 
 import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux'
+import { getKost,sortKos } from '../_actions/ListKos'
 
 class ClassListKos extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isListKos: false,
+      udahLogin: false,
+      tokenNya: '',
+      noPage: 0,
+      dataItem: '',
+      isModalVisible: false
+    };
+  }
   componentDidMount() {
     this._cekLogin();
-    this.__ambilDataMentah();
+    this.props.dispatch(getKost())
+    // this.__ambilDataMentah();
   }
   _cekLogin = async () => {
     const fetchDataMentah = await AsyncStorage.getItem('userToken');
@@ -43,53 +57,34 @@ class ClassListKos extends Component {
     }
   }
   __ambilDataMentah = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    let responNya = await axios.get(VarGlobal.host+'/dorms')
-    await this.setState({
-      dataItem:responNya.data
-    })
+    // const token = await AsyncStorage.getItem('userToken');
+    // let responNya = await axios.get(VarGlobal.host + '/dorms')
+    // this.setState({
+    //   dataItem:responNya.data
+    // })
+    // await this.props.dispatch(getKost())
   }
   showActionSheet = () => {
     this.ActionSheet.show()
   }
-
-  constructor() {
-    super();
-    this.state = {
-      isListKos: false,
-      udahLogin: false,
-      tokenNya: '',
-      judul: 'List Data [MAP]',
-      noPage: 0,
-      dataItem : '',
-      // dataItem: [
-      //   {
-      //     id: '1',
-      //     name: 'Kosan Mamiroom Isma TegalRejo SATUUU',
-      //     type: 'Putri',
-      //     photo: require('../assets/dummy2.jpg'),
-      //     room: 2,
-      //     size: '5 x 6 m',
-      //     price: 125000,
-      //     city: 'Yogyakarta',
-      //     isPromo: false
-      //   },
-      //   {
-      //     id: '2',
-      //     name: 'Kosan Mamiroom Isma TegalRejo DUAASS',
-      //     type: 'Campur',
-      //     photo: require('../assets/dummy3.jpg'),
-      //     room: 5,
-      //     size: '2 x 2 m',
-      //     price: 500000,
-      //     city: 'Bandung',
-      //     isPromo: true
-      //   },
-      // ],
-      isModalVisible: false
-    };
+  sortingAksi = (index) => {
+    switch (index) {
+      case 0:
+        this.props.dispatch(sortKos('price', 'desc'))
+        break;
+      case 1:
+        this.props.dispatch(sortKos('price', 'asc'))
+        break;
+      case 2:
+        this.props.dispatch(sortKos('type', 'desc'))
+        break;
+      case 3:
+        this.props.dispatch(sortKos('type', 'asc'))
+        break;
+      default:
+        break;
+    }
   }
-
   _aturHead = (noTab) => {
     if (noTab == 0) {
       return (
@@ -157,13 +152,11 @@ class ClassListKos extends Component {
       )
     }
   }
-
   toggleModal = () => {
     this.setState({
       isModalVisible: !this.state.isModalVisible
     });
   };
-
   _showModal = () => {
     return (
       <View style={{
@@ -190,13 +183,11 @@ class ClassListKos extends Component {
       </View>
     )
   }
-
   activateTab(noPageNya) {
     this.setState({
       noPage: noPageNya
     });
   }
-
   render() {
     let paramNavigateDetailKos = (itemNya) => {
       if (this.state.udahLogin) {
@@ -223,9 +214,12 @@ class ClassListKos extends Component {
               {/* <ScrollView style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}>
                 <View style={{ paddingBottom: 50 }}></View>
               </ScrollView> */}
-
+              {this.props.ListKos.isLoading ?
+                <ActivityIndicator size={50} style={{ flex: 1 }}>
+                </ActivityIndicator>
+                : false}
               <FlatList
-                data={this.state.dataItem}
+                data={this.props.ListKos.dataItem}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <CompListKost paramNavigate={() => paramNavigateDetailKos(item)} dataItem={item} />
@@ -255,7 +249,7 @@ class ClassListKos extends Component {
                   options={['Herga Termurah', 'Harga Termahal', 'Kos Putri', 'Kos Putra', 'Kos Campuran', 'Batal']}
                   cancelButtonIndex={5}
                   onPress={(index) => {
-
+                    this.sortingAksi(index);
                   }}
                 />
                 <TouchableOpacity onPress={this.showActionSheet} >
@@ -333,4 +327,10 @@ const stylesHead = StyleSheet.create({
   }
 });
 
-export default ClassListKos;
+const mapStateToProps = (state) => {
+  return {
+    ListKos: state.ListKos
+  }
+}
+
+export default connect(mapStateToProps)(ClassListKos);

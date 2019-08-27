@@ -15,10 +15,10 @@ import VarGlobal from '../environtment/VarGlobal'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import Geocoder from 'react-native-geocoding';
+import ImagePicker from 'react-native-image-picker';
 
 
 class ClassIklanTambah extends Component {
-
   state = {
     region: {
       latitude: -7.325043,
@@ -71,7 +71,8 @@ class ClassIklanTambah extends Component {
     provId: '',
     kabId: '',
     kecId: '',
-    kelId: ''
+    kelId: '',
+    avatarSource: ''
   }
   static navigationOptions = {
     title: 'KotaKos',
@@ -99,6 +100,7 @@ class ClassIklanTambah extends Component {
           price: parseInt(this.state.tmpprice),
           type: this.state.tmptype,
           description: this.state.tmpdescription,
+          // photo:this.state.avatarSource,
           wc: this.state.tmpwc,
           wifi: this.state.tmpwifi,
           keyRoom: this.state.tmpkeyRoom,
@@ -151,7 +153,6 @@ class ClassIklanTambah extends Component {
       .then(json => {
         var addressComponent = json;
         // console.log(addressComponent);
-        console.log(addressComponent)
         alert(addressComponent);
       })
       .catch(error => console.warn(error));
@@ -159,6 +160,35 @@ class ClassIklanTambah extends Component {
   ambilDataMapName = () => {
     this._getDataMap();
   }
+
+  showPopupImage = () => {
+    const options = {
+      title: 'Pilih Photo',
+      customButtons: [],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        this.setState({
+          avatarSource: source,
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <View>
@@ -490,6 +520,33 @@ class ClassIklanTambah extends Component {
                 multiline={true}
                 numberOfLines={2}
               />
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <View style={{
+                flexDirection: 'row',
+                paddingLeft: 5
+              }}>
+                <Text style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#000'
+                }}>Masukan Photo </Text>
+                <Text style={{
+                  color: 'red',
+                  fontSize: 25
+                }}>*</Text>
+              </View>
+              <Button mode='contained' style={{
+                backgroundColor: '#0476d9'
+              }} onPress={this.showPopupImage}>
+                <Text style={{
+                  color: '#fff',
+                  fontSize: 15,
+                  fontWeight: 'bold'
+                }}>Pilih Photo</Text>
+              </Button>
+              <Image source={this.state.avatarSource ? this.state.avatarSource : {uri:'../assets/dummy.jpg'}} 
+              style={this.state.avatarSource ? {marginTop:10, width:'100%',height:350} : {marginTop:10}} />
             </View>
             <Button mode='contained' style={{
               backgroundColor: '#0476d9'

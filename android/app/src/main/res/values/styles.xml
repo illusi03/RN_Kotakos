@@ -12,4 +12,12 @@
         <item name="colorControlHighlight">#114470</item>
     </style>
 
+    <style name="DefaultExplainingPermissionsTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">#0476d9</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">#0476d9</item>
+        <!-- Used for the background -->
+        <item name="android:background">#ffffff</item>
+    </style>
 </resources>
