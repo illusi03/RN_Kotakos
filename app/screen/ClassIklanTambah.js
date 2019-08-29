@@ -1,49 +1,44 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput, Image, Picker } from 'react-native';
-import { Appbar, Button, Text } from 'react-native-paper';
+import { View, TouchableOpacity, StyleSheet, TextInput, Image, Picker, Alert } from 'react-native';
+import { Button, Text, ActivityIndicator } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Container, Header, Left, Body, Right, Title, Subtitle, Tabs, Tab, TabHeading } from 'native-base';
 
-import CompMaps from '../component/CompMaps';
-import CompTextInput from '../component/CompTextInputIklan';
-
-import MarkerNya from '../assets/icon/icon_marker.png'
 import MapView, { Marker } from 'react-native-maps';
 import VarGlobal from '../environtment/VarGlobal'
-
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import Geocoder from 'react-native-geocoding';
 import ImagePicker from 'react-native-image-picker';
+import { connect } from 'react-redux';
+
+import { addKost,initKos } from '../_actions/ListKos';
 
 
 class ClassIklanTambah extends Component {
 
   state = {
-    sttPhoto: {
-      uri: '',
-      type: '',
-      name: '',
-    },
     region: {
       latitude: -7.325043,
       longitude: 108.221384,
       latitudeDelta: 0.025,
       longitudeDelta: 0.025,
     },
+    tmpPanjangKamar: '',
+    tmpLebarKamar: '',
+    tmpUkuranKamar: '',
     tmpname: '',
     tmplat: '',
     tmplong: '',
     tmproom: '',
     tmpprice: '',
-    tmptype: '',
+    tmptype: 'Putra',
     tmpdescription: '',
-    tmpwc: true,
-    tmpwifi: true,
-    tmpkeyRoom: true,
-    tmpbed: true,
-    tmpelectric: true,
+    tmpwc: false,
+    tmpwifi: false,
+    tmpkeyRoom: false,
+    tmpbed: false,
+    tmpelectric: false,
     tmpsize: '5x2m',
     tmpuserId: '',
     tmpProv: '',
@@ -98,18 +93,12 @@ class ClassIklanTambah extends Component {
       const userStrTemp = await AsyncStorage.getItem('userObj');
       const objUser = await JSON.parse(userStrTemp);
 
-      let data = new FormData();
-      // data.append({ uri: photo.uri, type: photo.type, name: photo.fileName });
-      data.append('name', this.state.tmpname);
-      data.append('lat', this.state.region.latitude.toString());
-      data.append('long', this.state.region.longitude.toString());
-      data.append('room', this.state.tmproom);
-      data.append('price', this.state.tmpprice);
-      data.append('type', this.state.tmptype);
-      data.append('photo', this.state.avatarSource);
-      data.append('userId', objUser.id);
-      console.log(data)
-
+      const provinsiFilter = this.state.dataProv.filter((item) => {
+        return item.id == this.state.tmpProv
+      })
+      const kabupatenFilter = this.state.dataKab.filter((item) => {
+        return item.id == this.state.tmpKab
+      })
 
       await this.setState({
         dataItem: {
@@ -120,33 +109,77 @@ class ClassIklanTambah extends Component {
           price: parseInt(this.state.tmpprice),
           type: this.state.tmptype,
           description: this.state.tmpdescription,
-          // photo:this.state.avatarSource,
+          province: provinsiFilter[0].nama,
+          city: kabupatenFilter[0].nama,
+          description: this.state.tmpdescription,
+          photo: this.state.avatarSource,
           wc: this.state.tmpwc,
           wifi: this.state.tmpwifi,
           keyRoom: this.state.tmpkeyRoom,
           bed: this.state.tmpbed,
           electric: this.state.tmpelectric,
-          size: this.state.tmpsize,
+          size: `${this.state.tmpPanjangKamar}x${this.state.tmpLebarKamar}m`,
           userId: objUser.id
         }
       })
 
-      // const response = await fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'multipart/form-data',
-      //     'Authorization': `Bearer ${params.token}`
-      //   },
-      //   body: data
-      // })
+      let data = new FormData();
+      // data.append({ uri: photo.uri, type: photo.type, name: photo.fileName });
+      data.append('name', this.state.dataItem.name);
+      data.append('lat', this.state.dataItem.lat);
+      data.append('long', this.state.dataItem.long);
+      data.append('room', this.state.dataItem.room);
+      data.append('price', this.state.dataItem.price);
+      data.append('type', this.state.dataItem.type);
+      data.append('size', this.state.dataItem.size);
+      data.append('description', this.state.dataItem.description);
+      data.append('province', this.state.dataItem.province);
+      data.append('city', this.state.dataItem.city);
+      data.append('wc', this.state.dataItem.wc);
+      data.append('wifi', this.state.dataItem.wifi);
+      data.append('keyRoom', this.state.dataItem.keyRoom);
+      data.append('bed', this.state.dataItem.bed);
+      data.append('electric', this.state.dataItem.electric);
+      data.append('photo', this.state.dataItem.photo);
+      data.append('userId', this.state.dataItem.userId);
+
+      this.props.dispatch(addKost(data, userTokenTemp))
+      /*
+      let berhasilInput = false
+      await axios({
+        url: `${VarGlobal.host}/dorm`,
+        method: 'POST',
+        data: data,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `bearer ${userTokenTemp}`
+        }
+      })
+        .then(function (response) {
+          berhasilInput = true
+        })
+        .catch(function (error) {
+          berhasilInput = false
+          console.log(`error from image : ${error}`);
+        })
+      if (berhasilInput) {
+        this.props.navigation.navigate('SWClassListKos')
+      } else {
+        alert('Harap isi data dengan benar')
+      }
+      */
 
       /*
+      SETTING UP - CONFIG 2
       const configBarier = {
-        headers: { Authorization: "bearer " + userTokenTemp }
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "bearer " + userTokenTemp }
       };
-      await axios.post(`${VarGlobal.host}/dorm`, this.state.dataItem, configBarier)
-      this.props.navigation.navigate('PrivateStack')
+      await axios.post(`${VarGlobal.host}/dorm`, data, configBarier)
+      console.log(data);
       */
     } catch (e) {
       console.log(`ERROR DI Simpan Data Iklan Tambah : ${e}`)
@@ -184,8 +217,7 @@ class ClassIklanTambah extends Component {
     Geocoder.from(this.state.region.latitude, this.state.region.latitude)
       .then(json => {
         var addressComponent = json;
-        // console.log(addressComponent);
-        alert(addressComponent);
+
       })
       .catch(error => console.warn(error));
   }
@@ -194,12 +226,7 @@ class ClassIklanTambah extends Component {
   }
   showPopupImage = () => {
     const options = {
-      title: 'Pilih Photo',
-      customButtons: [],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
+      title: 'Pilih Photo'
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
@@ -224,10 +251,17 @@ class ClassIklanTambah extends Component {
     });
   }
 
+  manggilIsDone = () => {
+    this.props.dispatch(initKos())
+    this.props.navigation.navigate('SWClassListKos')
+  }
 
   render() {
+    //Disable Yellowbox
+    console.disableYellowBox = true;
+
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {/* Header Detail Kost */}
         <View style={[styles.cardSimpleContainer, {
           height: 55,
@@ -252,350 +286,508 @@ class ClassIklanTambah extends Component {
           }}>KotaKos</Text>
           <Icon name='cube' size={30} color='#fff' />
         </View>
-
-        <View style={{ padding: 15 }}>
-          <ScrollView>
-            <View style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingBottom: 10
-            }}>
-              <Text style={{
-                fontSize: 22,
-                fontWeight: 'bold',
-                color: '#000',
-              }}>Tambah Data Iklan</Text>
-            </View>
-            <View style={{
-              backgroundColor: '#4f83cc',
-              borderWidth: 0.2,
-              marginBottom: 18
-            }} />
-
-            <View style={{ marginBottom: 5 }}>
+        {this.props.ListKos.isDoneAdd ? this.manggilIsDone()
+          : false}
+        {this.props.ListKos.isRejectAdd ?
+          Alert.alert(
+            'Warning',
+            'Koneksi Gagal / Tidak Bisa mengambil data ...',
+            [
+              { text: 'OK', onPress: () => this.props.navigation.pop() },
+            ]
+          )
+          : false}
+        {this.props.ListKos.isLoading ?
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+            <ActivityIndicator size={50}>
+            </ActivityIndicator>
+          </View> :
+          <View style={{ padding: 15 }}>
+            <ScrollView>
               <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingBottom: 10
               }}>
                 <Text style={{
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: 'bold',
-                  color: '#000'
-                }}>Nama Kos </Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+                  color: '#000',
+                }}>Tambah Data Iklan</Text>
               </View>
-              <TextInput style={{
-                borderColor: '#303f9f',
-                fontSize: 20,
-                color: '#000'
-              }}
-                onChangeText={(a) => this.setState({ tmpname: a })}
-                placeholder='Masukan Nama Kos'
-                underlineColorAndroid='#303f9f'
-              />
-            </View>
-
-            {/* 
-            <View style={{ marginBottom: 5 }}>
               <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
+                backgroundColor: '#4f83cc',
+                borderWidth: 0.2,
+                marginBottom: 18
+              }} />
+
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Nama Kos </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <TextInput style={{
+                  borderColor: '#303f9f',
+                  fontSize: 20,
                   color: '#000'
-                }}>Provinsi</Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
-              </View>
-              <Picker
-                selectedValue={this.state.tmpProv}
-                style={{ flex: 1 }}
-                onValueChange={(itemValue, itemIndex) => {
-                  this.setState({
-                    tmpProv:itemValue
-                  })
-                  if(this.state.tmpProv.length>0){
-                    this._getWilayahKab().then().catch();
-                  }
-                }} styles={{ fontSize: 18 }}>
-                  {this.state.dataProv.map( (item,index) => {
-                    return(
-                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
-                    )
-                  })}
-              </Picker>
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  color: '#000'
-                }}>Kab. Kota</Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
-              </View>
-              <Picker
-                selectedValue={this.state.tmpKab}
-                style={{ flex: 1 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({
-                    tmpKab:itemValue
-                  })
-                } styles={{ fontSize: 18 }}>
-                  {this.state.dataKab.map( (item,index) => {
-                    return(
-                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
-                    )
-                  })}
-              </Picker>
-            </View> */}
-
-
-
-            <Text style={{
-              fontSize: 15,
-              fontWeight: '200',
-              marginBottom: 10
-            }}>
-              Search alamat / area kos anda di Peta, kemudian pindahkan pin di peta ke lokasi tepat kos Anda.
-            </Text>
-            <View style={{
-              height: 250
-            }}>
-              <MapView style={{
-                width: '100%',
-                height: '100%'
-              }}
-                initialRegion={this.state.region}
-                onRegionChangeComplete={this.onRegionChange}>
-                <Marker
-                  coordinate={this.state.region}
-                  title={"Kosan"}
-                  description={" - Marker kosan dari KotaKos - "}
+                }}
+                  onChangeText={(a) => this.setState({ tmpname: a })}
+                  placeholder='Masukan Nama Kos'
+                  underlineColorAndroid='#303f9f'
                 />
-              </MapView>
-            </View>
+              </View>
 
-            <View style={{
-              flexDirection: 'row'
-            }}>
-              <View style={{ flex: 1 }}>
-                {/*  */}
-                <View style={{ marginBottom: 5 }}>
-                  <View style={{
-                    flexDirection: 'row',
-                    paddingLeft: 5
-                  }}>
-                    <Text style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
-                      color: '#000'
-                    }}>Lat. </Text>
-                    <Text style={{
-                      color: 'red',
-                      fontSize: 25
-                    }}>*</Text>
-                  </View>
-                  <TextInput style={{
-                    borderColor: '#303f9f',
-                    fontSize: 15,
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
                     color: '#000'
-                  }}
-                    editable={false}
-                    selectTextOnFocus={false}
-                    placeholder='Latitude'
-                    underlineColorAndroid='#303f9f'
-                    value={this.state.region.latitude.toString()}
+                  }}>Provinsi</Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <Picker
+                  selectedValue={this.state.tmpProv}
+                  style={{ flex: 1 }}
+                  onValueChange={async (itemValue, itemIndex) => {
+                    await this.setState({
+                      tmpProv: itemValue
+                    })
+                    if (this.state.tmpProv.length > 0) {
+                      this._getWilayahKab().then().catch();
+                    }
+                  }} styles={{ fontSize: 18 }}>
+                  {this.state.dataProv.map((item, index) => {
+                    return (
+                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
+                    )
+                  })}
+                </Picker>
+              </View>
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Kab. Kota</Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <Picker
+                  selectedValue={this.state.tmpKab}
+                  style={{ flex: 1 }}
+                  onValueChange={async (itemValue, itemIndex) =>
+                    await this.setState({
+                      tmpKab: itemValue
+                    })
+                  } styles={{ fontSize: 18 }}>
+                  {this.state.dataKab.map((item, index) => {
+                    return (
+                      <Picker.Item key={`${item.id}`} label={item.nama} value={item.id} />
+                    )
+                  })}
+                </Picker>
+              </View>
+
+
+
+              <Text style={{
+                fontSize: 15,
+                fontWeight: '200',
+                marginBottom: 10
+              }}>
+                Search alamat / area kos anda di Peta, kemudian pindahkan pin di peta ke lokasi tepat kos Anda.
+            </Text>
+              <View style={{
+                height: 250
+              }}>
+                <MapView style={{
+                  width: '100%',
+                  height: '100%'
+                }}
+                  initialRegion={this.state.region}
+                  onRegionChangeComplete={this.onRegionChange}>
+                  <Marker
+                    coordinate={this.state.region}
+                    title={"Kosan"}
+                    description={" - Marker kosan dari KotaKos - "}
                   />
+                </MapView>
+              </View>
+
+              <View style={{
+                flexDirection: 'row'
+              }}>
+                <View style={{ flex: 1 }}>
+                  {/*  */}
+                  <View style={{ marginBottom: 5 }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingLeft: 5
+                    }}>
+                      <Text style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }}>Lat. </Text>
+                      <Text style={{
+                        color: 'red',
+                        fontSize: 25
+                      }}>*</Text>
+                    </View>
+                    <TextInput style={{
+                      borderColor: '#303f9f',
+                      fontSize: 15,
+                      color: '#000'
+                    }}
+                      editable={false}
+                      selectTextOnFocus={false}
+                      placeholder='Latitude'
+                      underlineColorAndroid='#303f9f'
+                      value={this.state.region.latitude.toString()}
+                    />
+                  </View>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <View style={{ marginBottom: 5 }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingLeft: 5
+                    }}>
+                      <Text style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }}>Long. </Text>
+                      <Text style={{
+                        color: 'red',
+                        fontSize: 25
+                      }}>*</Text>
+                    </View>
+                    <TextInput style={{
+                      borderColor: '#303f9f',
+                      fontSize: 15,
+                      color: '#000'
+                    }}
+                      value={this.state.region.longitude.toString()}
+                      editable={false}
+                      selectTextOnFocus={false}
+                      placeholder='Longitude'
+                      underlineColorAndroid='#303f9f'
+                    />
+                  </View>
                 </View>
               </View>
-              <View style={{ flex: 1 }}>
-                <View style={{ marginBottom: 5 }}>
-                  <View style={{
-                    flexDirection: 'row',
-                    paddingLeft: 5
-                  }}>
-                    <Text style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
+
+
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>Luas Kosan</Text>
+              </View>
+              <View style={{
+                flexDirection: 'row',
+                paddingTop: 10
+              }}>
+                <View style={{ flex: 1 }}>
+                  {/*  */}
+                  <View style={{ marginBottom: 5 }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingLeft: 5
+                    }}>
+                      <Text style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }}>Panjang (m) </Text>
+                      <Text style={{
+                        color: 'red',
+                        fontSize: 25
+                      }}>*</Text>
+                    </View>
+                    <TextInput style={{
+                      borderColor: '#303f9f',
+                      fontSize: 20,
                       color: '#000'
-                    }}>Long. </Text>
-                    <Text style={{
-                      color: 'red',
-                      fontSize: 25
-                    }}>*</Text>
+                    }}
+                      keyboardType='numeric'
+                      selectTextOnFocus={false}
+                      placeholder='Panjang Kosan'
+                      underlineColorAndroid='#303f9f'
+                      onChangeText={(tmpPanjangKamar) => this.setState({ tmpPanjangKamar })}
+                    />
                   </View>
-                  <TextInput style={{
-                    borderColor: '#303f9f',
-                    fontSize: 15,
-                    color: '#000'
-                  }}
-                    value={this.state.region.longitude.toString()}
-                    editable={false}
-                    selectTextOnFocus={false}
-                    placeholder='Longitude'
-                    underlineColorAndroid='#303f9f'
-                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <View style={{ marginBottom: 5 }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingLeft: 5
+                    }}>
+                      <Text style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }}>Lebar (m)</Text>
+                      <Text style={{
+                        color: 'red',
+                        fontSize: 25
+                      }}>*</Text>
+                    </View>
+                    <TextInput style={{
+                      borderColor: '#303f9f',
+                      fontSize: 20,
+                      color: '#000'
+                    }}
+                      keyboardType='numeric'
+                      selectTextOnFocus={false}
+                      placeholder='Lebar Kosan'
+                      underlineColorAndroid='#303f9f'
+                      onChangeText={(tmpLebarKamar) => this.setState({ tmpLebarKamar })}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
 
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Jumlah Kamar</Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <TextInput style={{
+                  borderColor: '#303f9f',
+                  fontSize: 20,
                   color: '#000'
-                }}>Jumlah Kamar</Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+                }}
+                  onChangeText={(a) => this.setState({ tmproom: a })}
+                  keyboardType='numeric'
+                  placeholder='Masukan Jumlah Kamar'
+                  underlineColorAndroid='#303f9f'
+                />
               </View>
-              <TextInput style={{
-                borderColor: '#303f9f',
-                fontSize: 20,
-                color: '#000'
-              }}
-                onChangeText={(a) => this.setState({ tmproom: a })}
-                keyboardType='numeric'
-                placeholder='Masukan Jumlah Kamar'
-                underlineColorAndroid='#303f9f'
-              />
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Harga / Bulan </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <TextInput style={{
+                  borderColor: '#303f9f',
+                  fontSize: 20,
                   color: '#000'
-                }}>Harga / Bulan </Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+                }}
+                  onChangeText={(a) => this.setState({ tmpprice: a })}
+                  keyboardType='numeric'
+                  placeholder='Masukan Harga per Bulan'
+                  underlineColorAndroid='#303f9f'
+                />
               </View>
-              <TextInput style={{
-                borderColor: '#303f9f',
-                fontSize: 20,
-                color: '#000'
-              }}
-                onChangeText={(a) => this.setState({ tmpprice: a })}
-                keyboardType='numeric'
-                placeholder='Masukan Harga per Bulan'
-                underlineColorAndroid='#303f9f'
-              />
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  color: '#000'
-                }}>Jenis Kosan </Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Jenis Kosan </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <Picker
+                  selectedValue={this.state.tmptype}
+                  style={{ flex: 1 }}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({ tmptype: itemValue })
+                  } styles={{ fontSize: 18 }}>
+                  <Picker.Item label="Putra" value="Putra" />
+                  <Picker.Item label="Putri" value="Putri" />
+                </Picker>
               </View>
-              <Picker
-                selectedValue={this.state.tmptype}
-                style={{ flex: 1 }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({ tmptype: itemValue })
-                } styles={{ fontSize: 18 }}>
-                <Picker.Item label="Putra" value="Putra" />
-                <Picker.Item label="Putri" value="Putri" />
-              </Picker>
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Masukan Deskripsi </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <TextInput style={{
+                  borderColor: '#303f9f',
+                  fontSize: 17,
                   color: '#000'
-                }}>Masukan Deskripsi </Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+                }}
+                  onChangeText={(a) => this.setState({ tmpdescription: a })}
+                  placeholder='Masukan Deskripsi'
+                  underlineColorAndroid='#303f9f'
+                  multiline={true}
+                  numberOfLines={2}
+                />
               </View>
-              <TextInput style={{
-                borderColor: '#303f9f',
-                fontSize: 20,
-                color: '#000'
-              }}
-                onChangeText={(a) => this.setState({ tmpdescription: a })}
-                placeholder='Masukan Deskripsi'
-                underlineColorAndroid='#303f9f'
-                multiline={true}
-                numberOfLines={2}
-              />
-            </View>
-            <View style={{ marginBottom: 5 }}>
-              <View style={{
-                flexDirection: 'row',
-                paddingLeft: 5
-              }}>
-                <Text style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  color: '#000'
-                }}>Masukan Photo </Text>
-                <Text style={{
-                  color: 'red',
-                  fontSize: 25
-                }}>*</Text>
+
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Fitur Kos </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        tmpelectric: !this.state.tmpelectric
+                      })
+                    }}
+                    style={this.state.tmpelectric ? styles.fiturAktif : styles.fiturDisaktif}>
+                    <Icon name='bolt' size={15} color={this.state.tmpelectric ? '#fff' : '#0476d9'} style={{ marginRight: 5 }}></Icon>
+                    <Text style={this.state.tmpelectric ? styles.fiturTextAktif : styles.fiturTextDisaktif}>Listrik</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        tmpbed: !this.state.tmpbed
+                      })
+                    }}
+                    style={this.state.tmpbed ? styles.fiturAktif : styles.fiturDisaktif}>
+                    <Icon name='bed' size={15} color={this.state.tmpbed ? '#fff' : '#0476d9'} style={{ marginRight: 5 }}></Icon>
+                    <Text style={this.state.tmpbed ? styles.fiturTextAktif : styles.fiturTextDisaktif}>Kasur</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        tmpwc: !this.state.tmpwc
+                      })
+                    }}
+                    style={this.state.tmpwc ? styles.fiturAktif : styles.fiturDisaktif}>
+                    <Icon name='toilet' size={15} color={this.state.tmpwc ? '#fff' : '#0476d9'} style={{ marginRight: 5 }}></Icon>
+                    <Text style={this.state.tmpwc ? styles.fiturTextAktif : styles.fiturTextDisaktif}>Toilet Didalam</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        tmpwifi: !this.state.tmpwifi
+                      })
+                    }}
+                    style={this.state.tmpwifi ? styles.fiturAktif : styles.fiturDisaktif}>
+                    <Icon name='wifi' size={15} color={this.state.tmpwifi ? '#fff' : '#0476d9'} style={{ marginRight: 5 }}></Icon>
+                    <Text style={this.state.tmpwifi ? styles.fiturTextAktif : styles.fiturTextDisaktif}>Wifi</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        tmpkeyRoom: !this.state.tmpkeyRoom
+                      })
+                    }}
+                    style={this.state.tmpkeyRoom ? styles.fiturAktif : styles.fiturDisaktif}>
+                    <Icon name='key' size={15} color={this.state.tmpkeyRoom ? '#fff' : '#0476d9'} style={{ marginRight: 5 }}></Icon>
+                    <Text style={this.state.tmpkeyRoom ? styles.fiturTextAktif : styles.fiturTextDisaktif}>Kunci 24 Jam</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={{ marginBottom: 5 }}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingLeft: 5
+                }}>
+                  <Text style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }}>Masukan Photo </Text>
+                  <Text style={{
+                    color: 'red',
+                    fontSize: 25
+                  }}>*</Text>
+                </View>
+                <Button mode='contained' style={{
+                  backgroundColor: '#0476d9'
+                }} onPress={this.showPopupImage}>
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 15,
+                    fontWeight: 'bold'
+                  }}>Pilih Photo</Text>
+                </Button>
+                <Image source={this.state.avatarSource ? this.state.avatarSource : { uri: '../assets/dummy.jpg' }}
+                  style={this.state.avatarSource ? { marginTop: 10, width: '100%', height: 350 } : { marginTop: 10 }} />
               </View>
               <Button mode='contained' style={{
                 backgroundColor: '#0476d9'
-              }} onPress={this.showPopupImage}>
+              }} onPress={this._aksiTambah}>
                 <Text style={{
                   color: '#fff',
                   fontSize: 15,
                   fontWeight: 'bold'
-                }}>Pilih Photo</Text>
+                }}>SUBMIT DATA</Text>
               </Button>
-              <Image source={this.state.avatarSource ? this.state.avatarSource : { uri: '../assets/dummy.jpg' }}
-                style={this.state.avatarSource ? { marginTop: 10, width: '100%', height: 350 } : { marginTop: 10 }} />
-            </View>
-            <Button mode='contained' style={{
-              backgroundColor: '#0476d9'
-            }} onPress={this._aksiTambah}>
-              <Text style={{
-                color: '#fff',
-                fontSize: 15,
-                fontWeight: 'bold'
-              }}>SUBMIT DATA</Text>
-            </Button>
-            <View style={{ height: 100 }} />
-          </ScrollView>
-        </View>
+              <View style={{ height: 100 }} />
+            </ScrollView>
+          </View>
+        }
       </View >
     )
   }
@@ -645,7 +837,43 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 3,
     elevation: 3
-  }
+  },
+  fiturDisaktif: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderColor: '#0476d9',
+    borderWidth: 1,
+    justifyContent: 'center',
+    padding: 5,
+    alignContent: 'center',
+    alignItems: 'center',
+    margin: 5
+  },
+  fiturAktif: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#0476d9',
+    borderColor: '#0476d9',
+    borderWidth: 1,
+    justifyContent: 'center',
+    padding: 5,
+    alignContent: 'center',
+    alignItems: 'center',
+    margin: 5
+  },
+  fiturTextAktif: {
+    color: '#fff'
+  },
+  fiturTextDisaktif: {
+    color: '#0476d9'
+  },
 });
 
-export default ClassIklanTambah;
+const mapStateToProps = (state) => {
+  return {
+    ListKos: state.ListKos
+  }
+}
+
+export default connect(mapStateToProps)(ClassIklanTambah);

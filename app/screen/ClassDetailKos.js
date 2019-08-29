@@ -105,7 +105,7 @@ class ClassDetailKos extends Component {
       return (
         <View>
           <View style={{ position: 'relative', paddingBottom: 0 }}>
-            <Image source={(item.photo != null) ? {uri:`http://${item.photo}`} : require('../assets/dummy.jpg')}
+            <Image source={(item.photo != null) ? { uri: `http://${item.photo}` } : require('../assets/dummy.jpg')}
               // {this.props.navigation.getParam('itemNya').photo}
               style={{ height: 200, width: '100%' }} />
             {/* <TouchableOpacity onPress={() => alert('Tes')} style={{ position: 'absolute', right: 10, top: 5 }}>
@@ -188,6 +188,17 @@ class ClassDetailKos extends Component {
   }
   render() {
     const item = this.props.navigation.getParam('itemNya');
+    let tglUpdateBaru = new Date(item.updatedAt);
+    let bln = tglUpdateBaru.getMonth() + 1;
+    let tgl = tglUpdateBaru.getDate();
+    let hari = tglUpdateBaru.getDay();
+    let myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', `Jum'at`, 'Sabtu'];
+    var myMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    let thn = tglUpdateBaru.getFullYear();
+    let jam = tglUpdateBaru.getHours();
+    let mnt = tglUpdateBaru.getMinutes();
+    tglUpdateBaru = `(${myDays[hari]}) ${tgl} - ${myMonths[bln]} - ${thn} , Jam ${jam}:${mnt}`;
+
     // let dateFormatted = new Date(parseInt(item.createdAt.substr(6)))
     // let month = dateFormatted.getMonth() + 1;
     // let day = dateFormatted.getDate();
@@ -260,15 +271,17 @@ class ClassDetailKos extends Component {
                       {item.city}
                     </Text>
                   </View>
-                  <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
+                  <View style={{ flexDirection: 'column', paddingBottom: 3 }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>
                       {item.name}
                     </Text>
                   </View>
                   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
-                    <Text style={{ fontSize: 15, color: 'black' }}>
-                      {/* {dateFormatted} */}
-                      {item.updatedAt}
+                    <Text style={{ fontSize: 15, color: 'black', paddingBottom: 3 }}>
+                      Diperbaharui Terakhir pada :
+                    </Text>
+                    <Text style={{ fontSize: 13, color: 'black' }}>
+                      {tglUpdateBaru}
                     </Text>
                   </View>
                   {/* Sparator */}
@@ -276,11 +289,13 @@ class ClassDetailKos extends Component {
                   <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 3 }}>
                     <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
                       <Icon name="bolt" size={25} color='#0476d9' style={{ paddingRight: 5 }} />
-                      <Text style={{ fontSize: 12, color: 'black' }}>TIDAK Termasuk Listrik</Text>
+                      {item.electric ? <Text style={{ fontSize: 12, color: 'green' }}>SUDAH Termasuk Listrik</Text>
+                        :
+                        <Text style={{ fontSize: 12, color: 'red' }}>TIDAK Termasuk Listrik</Text>}
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
                       <Icon name="dollar-sign" size={25} color='#0476d9' style={{ paddingRight: 5 }} />
-                      <Text style={{ fontSize: 12, color: 'black' }}>TIDAK ada min. Bayar</Text>
+                      <Text style={{ fontSize: 12, color: 'green' }}>TIDAK ada min. Bayar</Text>
                     </View>
                   </View>
                   {/* Sparator Luas Kamar */}
@@ -326,7 +341,7 @@ class ClassDetailKos extends Component {
                     {item.bed ? this._renderFeature('bed', 'Kasur') : false}
                     {item.wc ? this._renderFeature('toilet', 'WC Didalam') : false}
                     {item.wifi ? this._renderFeature('wifi', 'Wifi') : false}
-                    {item.key ? this._renderFeature('key', 'Kunci 24Jam') : false}
+                    {item.keyRoom ? this._renderFeature('key', 'Kunci 24Jam') : false}
                     {/* <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                       <Icon name="toilet" size={25} color='#0476d9' style={{ marginHorizontal: 15 }} />
                       <Text style={{ textAlign: 'center', fontSize: 12, color: 'black', marginHorizontal: 15 }}>WC Didalam</Text>
@@ -373,6 +388,26 @@ class ClassDetailKos extends Component {
                     {/* <TouchableOpacity style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
                       <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Minta Nomor</Text>
                     </TouchableOpacity> */}
+                    <TouchableOpacity style={{
+                      marginRight: 5,
+                      backgroundColor: '#0476d9',
+                      borderRadius: 8,
+                      borderWidth: 2,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignContent:'center',
+                      padding: 5,
+                      borderColor: '#0476d9',
+                      flex:3
+                    }}
+                    // onPress={this.aksiHubKos}
+                    >
+                      <Text style={{
+                        fontWeight: 'bold',
+                        color: '#fff',
+                        textAlign:'center'
+                      }}>Hubungi Kost</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 {/* Kosan Menarik Lainya */}
@@ -418,23 +453,6 @@ class ClassDetailKos extends Component {
               marginHorizontal: 5
             }}>
               <TouchableOpacity style={{
-                marginRight: 5,
-                backgroundColor: '#0476d9',
-                borderRadius: 8,
-                borderWidth: 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 5,
-                borderColor: '#0476d9'
-              }}
-              // onPress={this.aksiHubKos}
-              >
-                <Text style={{
-                  fontWeight: 'bold',
-                  color: '#fff'
-                }}>Hubungi Kost</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{
                 backgroundColor: '#0476d9',
                 borderRadius: 8,
                 borderWidth: 2,
@@ -445,8 +463,8 @@ class ClassDetailKos extends Component {
               }}
                 onPress={() => {
                   if (this.state.udahLogin) {
-                    this.props.navigation.navigate('ClassDetailBooking',{
-                      itemNya : item
+                    this.props.navigation.navigate('ClassDetailBooking', {
+                      itemNya: item
                     })
                   } else {
                     this.props.navigation.navigate('ClassLogin')

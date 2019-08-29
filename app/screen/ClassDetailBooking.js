@@ -216,7 +216,7 @@ export default class ClassDetailBooking extends Component {
                 {item.bed ? <Icon name='bed' size={18} color='#0476d9'></Icon> : false}
                 {item.wifi ? <Icon name='wifi' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
                 {item.wc ? <Icon name='toilet' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
-                {item.key ? <Icon name='key' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
+                {item.keyRoom ? <Icon name='key' size={18} color='#0476d9' style={{ paddingLeft: 15 }}></Icon> : false}
               </View>
               <Text style={{
                 fontSize: 17,

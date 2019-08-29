@@ -246,8 +246,8 @@ class ClassListKos extends Component {
                 <ActionSheet
                   ref={o => this.ActionSheet = o}
                   title={'Urutkan Berdasarkan'}
-                  options={['Herga Termurah', 'Harga Termahal', 'Kos Putri', 'Kos Putra', 'Kos Campuran', 'Batal']}
-                  cancelButtonIndex={5}
+                  options={['Herga Termurah', 'Harga Termahal', 'Kos Putri', 'Kos Putra', 'Batal']}
+                  cancelButtonIndex={4}
                   onPress={(index) => {
                     this.sortingAksi(index);
                   }}

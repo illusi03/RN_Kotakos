@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createSwitchNavigator} from "react-navigation";
 
 import PrivateNav from '../navigation/PrivateNav';
 import ClassHome from '../screen/Home';
@@ -8,12 +8,16 @@ import ClassDetailKos from '../screen/ClassDetailKos';
 import ClassIklanTambah from '../screen/ClassIklanTambah';
 import ClassDetailBooking from '../screen/ClassDetailBooking';
 
+const SwitchClassIklanTambah = createSwitchNavigator({
+  SWIklanTambah:ClassIklanTambah,
+  SWClassListKos: ClassListKos
+})
 const StackPrivate = createStackNavigator({
   PrivateNav: PrivateNav,
   ClassHome: ClassHome,
   ClassListKos: ClassListKos,
   ClassDetailKos: ClassDetailKos,
-  ClassIklanTambah: ClassIklanTambah,
+  ClassIklanTambah:SwitchClassIklanTambah,
   ClassDetailBooking: ClassDetailBooking,
 }, {
     initialRouteName: "PrivateNav",

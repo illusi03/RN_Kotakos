@@ -16,6 +16,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios'
 import VarGlobal from '../environtment/VarGlobal'
 
+import AsyncStorage from '@react-native-community/async-storage';
+import jwt from "react-native-pure-jwt";
+
 export default class ClassRegister extends Component {
 
   state = {
@@ -38,13 +41,31 @@ export default class ClassRegister extends Component {
         telp: this.state.telp,
         job: this.state.job
       }
-      await axios.post(VarGlobal.host + "/user", tempUser)
-        .then((response) => {
-          this.props.navigation.navigate('PublicNav')
-        })
-        .catch((error) => {
-          alert(error)
-        });
+      let bisaLogin = false;
+      let objKosong;
+      try {
+        objKosong = await axios.post(VarGlobal.host + "/register", tempUser)
+        bisaLogin = true
+      } catch (e) { }
+
+      if (bisaLogin) {
+        try {
+          await AsyncStorage.setItem('userToken', objKosong.data.token);
+          const objJwt = await jwt.decode(
+            objKosong.data.token, // the token
+            'reactnative', // the secret
+            {
+              skipValidation: true // to skip signature and exp verification
+            }
+          );
+          await AsyncStorage.setItem('userObj', JSON.stringify(objJwt.payload.userObj));
+        } catch (e) {
+          alert(e)
+        }
+        this.props.navigation.navigate('PrivateStack')
+      } else {
+        alert('Terjadi kesalahan (Field belum lengkap)')
+      }
     }
     catch (e) { }
   }
