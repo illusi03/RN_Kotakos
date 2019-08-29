@@ -30,7 +30,7 @@ class ClassLogin extends Component {
       textPass: '',
       userToken: '',
       tempUserFetch: '',
-      tempIDNyaBaru:''
+      tempIDNyaBaru: ''
     }
   }
   seleksiLogin = async () => {
@@ -51,9 +51,10 @@ class ClassLogin extends Component {
             skipValidation: true // to skip signature and exp verification
           }
         );
-        await AsyncStorage.setItem('userObj',JSON.stringify(objJwt.payload.userObj));
+        await AsyncStorage.setItem('userObj', JSON.stringify(objJwt.payload.userObj));
+        const userStrTemp = await AsyncStorage.getItem('userObj');
         this.props.navigation.navigate('PrivateStack')
-      }else{
+      } else {
         alert('Gagal Login')
       }
     }
@@ -149,6 +150,8 @@ class ClassLogin extends Component {
                 backgroundColor: '#fff',
                 width: '100%'
               }}
+                secureTextEntry
+                password={true}
                 placeholder='Masukan Password Disini'
                 onChangeText={(textPass) => this.setState({ textPass })}
               ></TextInput>

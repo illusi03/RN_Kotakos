@@ -12,7 +12,8 @@ import Geocoder from 'react-native-geocoding';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 
-import { addKost,initKos } from '../_actions/ListKos';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import { addKost, initKos } from '../_actions/ListKos';
 
 
 class ClassIklanTambah extends Component {
@@ -637,7 +638,16 @@ class ClassIklanTambah extends Component {
                     fontSize: 25
                   }}>*</Text>
                 </View>
-                <Picker
+
+                <RadioForm
+                  radio_props={[
+                    {label:'Putra',value:'Putra'},
+                    {label:'Putri',value:'Putri'}
+                  ]}
+                  initial={0}
+                  onPress={(value) => { this.setState({ tmptype: value }) }}
+                />
+                {/* <Picker
                   selectedValue={this.state.tmptype}
                   style={{ flex: 1 }}
                   onValueChange={(itemValue, itemIndex) =>
@@ -645,7 +655,9 @@ class ClassIklanTambah extends Component {
                   } styles={{ fontSize: 18 }}>
                   <Picker.Item label="Putra" value="Putra" />
                   <Picker.Item label="Putri" value="Putri" />
-                </Picker>
+                </Picker> */}
+
+
               </View>
               <View style={{ marginBottom: 5 }}>
                 <View style={{

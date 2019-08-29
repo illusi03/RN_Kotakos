@@ -60,11 +60,11 @@ class ClassDetailKos extends Component {
     this.state = {
       isFotoState: true,
       udahLogin: false,
-      dateUpdateBaru: ''
+      dateUpdateBaru: '',
     };
   }
   aksiHubKos = () => {
-    SendIntentAndroid.sendPhoneDial('085224242412', false);
+    SendIntentAndroid.sendPhoneDial('0852234455242', false);
   }
   static navigationOptions = {
     title: 'Detail Kos',
@@ -125,6 +125,8 @@ class ClassDetailKos extends Component {
         </View>
       );
     } else {
+      const item = this.props.navigation.getParam('itemNya');
+      console.log()
       return (
         <View>
           <View style={{ height: 200, width: '100%', position: 'relative', paddingBottom: 0 }}>

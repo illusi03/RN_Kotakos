@@ -34,7 +34,7 @@ class CheckStack extends Component {
       const fetchDataUserJSON = await AsyncStorage.getItem('userObj');
       const userObj = JSON.parse(fetchDataUserJSON);
       console.log(`userToken Nya : ${fetchDataMentah}`)
-      console.log(`userObj Nya : ${userObj}`)
+      console.log(`userObj Nya : ${JSON.stringify(userObj)}`)
       if (fetchDataMentah != null) {
         this.props.navigation.navigate('PrivateStack')
       } else {

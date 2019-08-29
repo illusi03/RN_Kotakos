@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Picker
 } from "react-native";
 import { Button } from 'react-native-paper'
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -19,6 +20,9 @@ import VarGlobal from '../environtment/VarGlobal'
 import AsyncStorage from '@react-native-community/async-storage';
 import jwt from "react-native-pure-jwt";
 
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+
+
 export default class ClassRegister extends Component {
 
   state = {
@@ -26,7 +30,12 @@ export default class ClassRegister extends Component {
     password: '',
     name: '',
     telp: '',
-    job: ''
+    job: '',
+    dataGender: [
+      { label: 'Laki-Laki', value: 'Laki-Laki' },
+      { label: 'Perempuan', value: 'Perempuan' },
+    ],
+    gender:'Laki-Laki'
   }
   _aksiRegis = () => {
     this._aksiRegisAsync();
@@ -39,7 +48,8 @@ export default class ClassRegister extends Component {
         password: this.state.password,
         name: this.state.name,
         telp: this.state.telp,
-        job: this.state.job
+        job: this.state.job,
+        gender:this.state.gender
       }
       let bisaLogin = false;
       let objKosong;
@@ -153,7 +163,8 @@ export default class ClassRegister extends Component {
                   backgroundColor: '#fff',
                   width: '100%'
                 }}
-                  keyboardType='visible-password'
+                  secureTextEntry
+                  password={true}
                   onChangeText={(password) => this.setState({ password })}
                   placeholder='Masukan Password Disini'
                 ></TextInput>
@@ -201,6 +212,26 @@ export default class ClassRegister extends Component {
                   placeholder='Masukan No HP Disini'
                 ></TextInput>
               </View>
+
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: 250,
+                marginBottom: 10
+              }}>
+                <Text style={{
+                  fontSize: 16,
+                  fontWeight: '300',
+                  color: '#000',
+                  paddingBottom:5
+                }}>Jenis Kelamin</Text>
+                <RadioForm
+                  radio_props={this.state.dataGender}
+                  initial={0}
+                  onPress={(value) => { this.setState({ gender: value }) }}
+                />
+              </View>
+
               <View style={{
                 justifyContent: 'center',
                 alignItems: 'flex-start',
