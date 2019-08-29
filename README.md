@@ -40,7 +40,7 @@ Aplikasi ini masih tahap test , dengan kata lain masih terdapat fitur yang belum
 * email: mohammad.azhari12@gmail.com
 
 ## Download App (Demo usage only)
-[![Iyat Download](https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png)](https://linktodownload.com/course-repo-example.apk)
+[![Iyat Download](https://i1.wp.com/apkmodsios.com/wp-content/uploads/2018/12/Download-Infinite-Design-3.4.10-Apk.png)](https://drive.google.com/open?id=1t0b_4cgUAi8m89a1_gttDyaBvxixh721)
 
 
 ----
