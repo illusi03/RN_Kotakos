@@ -3,7 +3,6 @@ Nama aplikasi ini adalah "KotaKos" , Aplikasi yang dibuat untuk memudahkan para 
 <br>
 
 ## Penting untuk dibaca
-Aplikasi ini adalah CLONING dari Aplikasi Mamikos.
 Aplikasi ini masih tahap test , dengan kata lain masih terdapat fitur yang belum terselesaikan , Antara lain : 
 * Map (Ketika Ngedrag , Langsung dapat Lokasi detail Mapnya)
 * Pemesanan (Booking) 
