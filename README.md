@@ -7,6 +7,7 @@ Aplikasi ini masih tahap test , dengan kata lain masih terdapat fitur yang belum
 * Map (Ketika Ngedrag , Langsung dapat Lokasi detail Mapnya)
 * Pemesanan (Booking) 
 * Pengiriman Pesan (Chatting)
+* Screen Personal Information (Profile,Iklan,Syarat dan Ketentuan)
 
 ## Gambar Aplikasi
 <p float="left">
